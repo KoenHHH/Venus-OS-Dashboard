@@ -16,15 +16,43 @@ export const eventHandlers = new WeakMap();
 /**************************************/
 let translations = {}; // Stocke les traductions chargées
 
+// FIXED: Language configuration with fallback support
+const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'es'];
+const DEFAULT_LANGUAGE = 'en';
+
 export async function loadTranslations(appendTo) {
-    const lang = appendTo._hass?.language || "en"; // Langue HA, ou "en" par défaut
+    // Get requested language from Home Assistant, normalize it
+    const requestedLang = appendTo._hass?.language || DEFAULT_LANGUAGE;
+    const baseLang = requestedLang.split('-')[0].toLowerCase();
+    
+    // Check if language is supported, fallback to English if not
+    const lang = SUPPORTED_LANGUAGES.includes(baseLang) ? baseLang : DEFAULT_LANGUAGE;
+    
+    // Log fallback for debugging
+    if (lang !== baseLang) {
+        console.info(`[Venus OS Dashboard] Language '${requestedLang}' not supported, using '${lang}'`);
+    }
+    
     try {
+        // Try to load the selected language file
         const response = await import(`./lang-${lang}.js`);
         translations = response.default;
     } catch (error) {
-        console.error("Erreur de chargement de la langue :", error);
-        const response = await import(`./lang-en.js`);
-        translations = {};
+        console.error(`[Venus OS Dashboard] Failed to load language '${lang}':`, error);
+        
+        // If loading fails and it's not already English, try English as final fallback
+        if (lang !== DEFAULT_LANGUAGE) {
+            try {
+                console.warn(`[Venus OS Dashboard] Falling back to ${DEFAULT_LANGUAGE}`);
+                const response = await import(`./lang-${DEFAULT_LANGUAGE}.js`);
+                translations = response.default;
+            } catch (fallbackError) {
+                console.error(`[Venus OS Dashboard] Failed to load fallback language:`, fallbackError);
+                translations = {};
+            }
+        } else {
+            translations = {};
+        }
     }
 }
 
@@ -1136,3 +1164,4 @@ export function attachSubLinkClick(appendTo) {
     });
 }
     
+
