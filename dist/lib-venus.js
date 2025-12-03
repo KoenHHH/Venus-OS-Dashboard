@@ -564,7 +564,7 @@ function creatLine(anchorId1, anchorId2, direction_init, isDarkTheme, appendTo) 
 	if (!pathData.includes("NaN")) {
         path.setAttribute("d", pathData);
     } else {
-        console.warn("Chemin SVG ignoré car pathData contient NaN");
+        console.warn("SVG path ignored because pathData contains NaN");
         return;
     }
     
@@ -598,7 +598,7 @@ function getAnchorCoordinates(anchorId, appendTo) {
 	const container = appendTo.querySelector(`#dashboard`);
 	
 	if (!anchor || !container) {
-		console.error("Anchor ou container introuvable : " + anchorId);
+		console.error("Anchor or container not found : " + anchorId);
 		return null;
 	}
 	
@@ -700,17 +700,17 @@ export async function startPeriodicTask(config, hass) {
             
             const intervalMinutes = 15;
             
-            //console.log(`Tentative de démarrage de la tâche périodique pour ${device.entity}. Intervalle : ${intervalMinutes} minutes.`);
+            //console.log(`Attempting to start the periodic task for ${device.entity}. Interval: ${intervalMinutes} minutes.`);
             
             const firstExecutionSuccessful = await performTask(device.entity, hass);
             
             if (!firstExecutionSuccessful) {
-                console.warn(`La première exécution a échoué pour ${device.entity}. Tâche périodique annulée.`);
+                console.warn(`The first execution failed for ${device.entity}. Periodic task canceled.`);
                 clearAllIntervals();
                 return false;
             }
             
-            //console.log(`Première exécution réussie pour ${device.entity}. Mise en place de la tâche périodique.`);
+            //console.log(`First successful execution for ${device.entity}. Implementation of the periodic task`);
 
             const intervalId = setInterval(() => {
                 performTask(device.entity, hass);
@@ -725,22 +725,22 @@ export async function startPeriodicTask(config, hass) {
 export function clearAllIntervals(appendTo) {
     intervals.forEach((intervalId, id) => {
         clearInterval(intervalId);
-        //console.log(`Tâche pour l'entité "${id}" arrêtée.`);
+        //console.log(`Task for the entity "${id}" stopped.`);
     });
     intervals.clear();
 }
 
 function performTask(entityId, hass) {
-    //console.log(`Tâche périodique en cours pour l'entité "${entityId}"...`);
+    //console.log(`Periodic task in progress for the entity "${entityId}"...`);
     
     const historicalData = fetchHistoricalData(entityId, 24, hass);
     
     if (historicalData === "false") {
-        console.warn(`Impossible de récupérer l'historique pour ${entityId}.`);
+        console.warn(`Unable to retrieve history for ${entityId}.`);
         return false; 
     }
 
-    //console.log(`Tâche périodique réussie pour ${entityId}.`);
+    //console.log(`Successful periodic task for ${entityId}.`);
     return true; 
 }
 
@@ -749,7 +749,7 @@ async function fetchHistoricalData(entityId, periodInHours = 24, hass, numSegmen
     const startTime = new Date(now.getTime() - periodInHours * 60 * 60 * 1000); 
 
     if (!hass || !hass.states || !hass.states[entityId]) {
-        console.error(`hass ou l'entité ${entityId} n'est pas encore disponible.`);
+        console.error(`hass or the entity ${entityId} is not yet available.`);
         return false;
     }
 
@@ -759,7 +759,7 @@ async function fetchHistoricalData(entityId, periodInHours = 24, hass, numSegmen
         const response = await hass.callApi('GET', url);
 
         if (response.length === 0 || response[0].length === 0) {
-            console.log(`Aucune donnée disponible pour "${entityId}" dans la période de ${periodInHours} heure(s).`);
+            console.log(`No data available for "${entityId}" in the period off ${periodInHours} hour(s).`);
             return false;
         }
 
@@ -773,7 +773,7 @@ async function fetchHistoricalData(entityId, periodInHours = 24, hass, numSegmen
             .filter((item) => !isNaN(item.state)); 
 
         if (formattedData.length === 0) {
-            console.log(`Aucune donnée valide formatée pour "${entityId}".`);
+            console.log(`No valid data formatted for "${entityId}".`);
             return false;
         }
 
@@ -824,7 +824,7 @@ async function fetchHistoricalData(entityId, periodInHours = 24, hass, numSegmen
 
         return true;
     } catch (error) {
-        console.error('Erreur lors de la récupération de l’historique :', error);
+        console.error('Error retrieving history :', error);
         return false;
     }
 }
@@ -947,3 +947,4 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
