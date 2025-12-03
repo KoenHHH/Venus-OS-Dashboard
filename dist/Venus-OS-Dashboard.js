@@ -1,13 +1,5 @@
-/*
-
- switch auto theme clair/sombre ou choix manuel
- 
- donc onglet param en plus
-
-*/
-
 console.info(
-  "%c 🗲 %c - %cVenus OS BD%c - %c 🗲 \n%c version 0.1.17 ",
+  "%c 🗲 %c - %cVenus OS BD%c - %c 🗲 \n%c version 0.1.18 ",
   "color: white; font-weight: bold; background: black",
   "color: orange; font-weight: bold; background: blue; font-weight: bold;",
   "color: white; font-weight: bold; background: blue; text-decoration: underline; text-decoration-color: orange; text-decoration-thickness: 5px; text-underline-offset: 2px;",
@@ -184,7 +176,8 @@ customElements.define('venus-os-dashboard', venusOsDashboardCard);
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: 'venus-os-dashboard',
-  name: 'Venus OS Dashboard',
+  name: 'Venus OS Dashboard V2',
   preview: true,
   description: 'A DashBoard that looklike Venos OS gui-v2 from Victron.',
 });
+
