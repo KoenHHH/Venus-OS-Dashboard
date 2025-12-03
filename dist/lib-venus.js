@@ -154,7 +154,15 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
                 
         let state = hass.states[device.entity];
         let rawValue = state ? state.state : 'N/C';
-        let value = (rawValue !== 'N/C' && !isNaN(rawValue)) ? Math.round(parseFloat(rawValue)) : rawValue;
+        console.log('Raw value:', rawValue, 'Type:', typeof rawValue);
+        let value = rawValue;
+        if (rawValue !== 'N/C' && rawValue !== 'unavailable' && rawValue !== 'unknown') {
+            const numValue = parseFloat(rawValue);
+            if (!isNaN(numValue)) {
+                value = Math.round(numValue);
+                console.log('Rounded to:', value);
+            }
+        }
         let unit = state && state.attributes.unit_of_measurement ? state.attributes.unit_of_measurement : '';
             
         let addGauge = "";
@@ -948,5 +956,6 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
 
