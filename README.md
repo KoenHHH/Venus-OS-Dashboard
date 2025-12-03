@@ -1,5 +1,4 @@
-
-Venus OS Dashboard
+# Venus OS Dashboard
 
 ![Overview](https://github.com/user-attachments/assets/5c450676-acba-4c8b-a558-dc36ff85c208)
 
