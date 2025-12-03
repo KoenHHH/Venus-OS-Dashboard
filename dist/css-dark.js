@@ -2,17 +2,17 @@ export function cssDataDark(user) {
     var css =`
     
         ha-card {
-            --box-background-color: #1f2a3c;  	/* Couleur de fond de la box */
-            --box-shadow-color: #38619b;      	/* Couleur de l'ombre de la box */
-            --anchor-color: #38619b;            /* Couleur du point d'accroche */
-	    --line-color: #4369a2; 				/* Couleur de la ligne */
+            --box-background-color: #1f2a3c;  	
+            --box-shadow-color: #38619b;      
+            --anchor-color: #38619b;           
+	    	--line-color: #4369a2; 				
         }
         
         .db-container {
             position: relative;
-            width: 100%; /* Prend toute la largeur disponible */
-            padding-bottom: 60%; /* Définit la hauteur à 60% de la largeur */
-            overflow: hidden; /* Cache tout dépassement éventuel */
+            width: 100%; 
+            padding-bottom: 60%;
+            overflow: hidden;
         }
         
   
@@ -22,7 +22,6 @@ export function cssDataDark(user) {
             height: 100%;
             padding: 25px 20px 15px 20px;
             border-radius: 10px;
-            /*border: 1px solid #ccc;*/
             position: absolute;
             box-sizing: border-box;
             background-color: #111111;
@@ -49,11 +48,10 @@ export function cssDataDark(user) {
         }
 
         .box {
-            background-color: var(--box-background-color);  /* Utilisation de la variable pour la couleur de fond */
+            background-color: var(--box-background-color);  
             color: white;
-            /*font-weight: bold;*/
             border-radius: 5px;
-            box-shadow: 0px 0px 1px 2px var(--box-shadow-color);  /* Utilisation de la variable pour la couleur de l'ombre */
+            box-shadow: 0px 0px 1px 2px var(--box-shadow-color); 
             height: 100%;
             max-height: 45%;
             margin: 5px;
@@ -65,15 +63,13 @@ export function cssDataDark(user) {
             padding: 3% 5%;
         }
 
-        /* Point d'accroche */
         .anchor {
             position: absolute;
-            background-color: var(--anchor-color); /* Utilisation de la variable pour la couleur du point d'accroche */
-            border-radius: 50%; /* Rond */
+            background-color: var(--anchor-color); 
+            border-radius: 50%; 
 			box-shadow: 0px 0px 1px 1px var(--anchor-color);
         }
 
-        /* Position des points pour la colonne 2 */
         .box .anchor-L {
 			width: 5px;
             height: 10px;
@@ -125,14 +121,12 @@ export function cssDataDark(user) {
 			z-index: 1000;
 		}
 		
-
         .content {
             position: relative;
 			display: flex;
 			flex-direction: column;
 			width: 100%;
 			height: 100%;
-			/*gap: calc(2.1vw - 15px);*/
 			gap: 2%;
 		}
 		
@@ -156,12 +150,10 @@ export function cssDataDark(user) {
 			align-items: center;
 			width: 100%;
 			font-size: calc(var(--card-width) * 0.1);;
-			/*line-height: 1.8em;*/
 			z-index: 2;
 		}
 		
 		.headerEntity {
-			/*position: absolute;*/
 			display: flex;
 			align-items: center;
 			font-size: 1.1em;
@@ -191,7 +183,6 @@ export function cssDataDark(user) {
 		}
 		
 		.boxUnit {
-			/*width: 100%;*/
 			color: #aaaaaa;
 			z-index: 2;
 		}
@@ -203,7 +194,6 @@ export function cssDataDark(user) {
 			height: 30%;
 			opacity: 1;
 			z-index: 2;
-			/*border-radius: 0 0 5px 5px;*/
 		}
 		
 		.gauge {
@@ -229,7 +219,6 @@ export function cssDataDark(user) {
 		    background-repeat: repeat;
 		    background-size: 30px 12px;
 
-		    /* Masque pour estomper */
 		    mask-image: linear-gradient(to bottom, #fff4, transparent);
 		    mask-repeat: no-repeat;
 		    mask-size: 100% 100%;
@@ -260,3 +249,4 @@ export function cssDataDark(user) {
 
 }
   
+
