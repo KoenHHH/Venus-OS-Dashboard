@@ -153,7 +153,8 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
         const innerContent = appendTo.querySelector(`#dashboard > #column-${boxId[0]} > #box_${boxId} > #content_${boxId}`);
                 
         let state = hass.states[device.entity];
-        let value = state ? state.state : 'N/C';
+        let rawValue = state ? state.state : 'N/C';
+        let value = (rawValue !== 'N/C' && !isNaN(rawValue)) ? Math.round(parseFloat(rawValue)) : rawValue;
         let unit = state && state.attributes.unit_of_measurement ? state.attributes.unit_of_measurement : '';
             
         let addGauge = "";
@@ -947,4 +948,5 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
