@@ -1,20 +1,8 @@
-/**********************************************/
-/* "variable" permettant de lister les panels */
-/* qui sont "expended"                        */
-/**********************************************/
 let expandedPanelsState = new Set();
 
-/**********************************************/
-/* "variable" permettant de lister les events */
-/* sur les objets et eviter de les recrer     */
-/**********************************************/
 export const eventHandlers = new WeakMap();
 
-/**************************************/
-/* fonctions permettant la traduction */
-/* de l'editeur graphique             */
-/**************************************/
-let translations = {}; // Stocke les traductions chargées
+let translations = {}; 
 
 // FIXED: Language configuration with fallback support
 const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'es'];
@@ -57,18 +45,14 @@ export async function loadTranslations(appendTo) {
 }
 
 export function t(func, key) {
-    return translations?.[func]?.[key] || `⚠️ ${func}.${key} ⚠️`; // Si absent, affiche une alerte visuelle
+    return translations?.[func]?.[key] || `⚠️ ${func}.${key} ⚠️`;
 }
 
-/***************************************/
-/* fonction de rendu du tab pricipal : */
-/***************************************/
 export function tab1Render(appendTo) {
     
     const tabContent = appendTo.shadowRoot.querySelector('#tab-content');
     tabContent.innerHTML = '';
     
-    // Ajout du contenu à l'élément appendTo
     const editorDiv = document.createElement('div');
     editorDiv.classList.add('editor');
     
@@ -88,22 +72,20 @@ export function tab1Render(appendTo) {
     demoRow.appendChild(demoSwitchContainer);
     editorDiv.appendChild(demoRow);*/
     
-    // Choix du thème
     const themeRow = document.createElement('div');
     themeRow.classList.add('col');
     const themeLabel = document.createElement('div');
     themeLabel.classList.add('left');
-    themeLabel.textContent = t("tab1Render", "theme_choice");//'Choix du theme de la carte :';
+    themeLabel.textContent = t("tab1Render", "theme_choice");
     const radioGroup = document.createElement('div');
     radioGroup.classList.add('radio-group', 'row');
     const themeOptions = [
-      { label: t("tab1Render", "light"), value: 'light' }, // claire
-      { label: t("tab1Render", "dark"), value: 'dark' }, // sombre
-      { label: t("tab1Render", "auto"), value: 'auto' }, // auto
+      { label: t("tab1Render", "light"), value: 'light' }, 
+      { label: t("tab1Render", "dark"), value: 'dark' }, 
+      { label: t("tab1Render", "auto"), value: 'auto' }, 
     ];
     
-    // Vérifiez si aucune option n'est définie dans le YAML
-    const defaultTheme = appendTo._config.theme || 'auto';
+    const defaultTheme = appendTo._config.theme || 'dark';
     
     themeOptions.forEach(option => {
       const formfield = document.createElement('ha-formfield');
@@ -121,13 +103,12 @@ export function tab1Render(appendTo) {
     themeRow.appendChild(themeLabel);
     themeRow.appendChild(radioGroup);
     editorDiv.appendChild(themeRow);
-    
-    // Nombre de "Devices" pour chaque colonne
+
     const devicesRow = document.createElement('div');
     devicesRow.classList.add('col');
     const devicesLabel = document.createElement('div');
     devicesLabel.classList.add('left');
-    devicesLabel.textContent = t("tab1Render", "devices_per_column"); //'Nombre de "Devices" pour chaque colonne :';
+    devicesLabel.textContent = t("tab1Render", "devices_per_column"); 
     
     const devicesInputs = [
       { id: 'boxCol1', label: 'col. 1', value: appendTo._config.param?.boxCol1 ?? 1, min: 1, max: 4, step: 1 },
@@ -154,22 +135,19 @@ export function tab1Render(appendTo) {
     devicesRow.appendChild(devicesRowContainer);
     editorDiv.appendChild(devicesRow);
     
-    // Taille de la font dans les zones des "Devices"
     const fontSizeRow = document.createElement('div');
     fontSizeRow.classList.add('col');
     const fontSizeLabel = document.createElement('div');
     fontSizeLabel.classList.add('row');
-    fontSizeLabel.textContent = t("tab1Render", "font_size_zones");// 'Taille de la font dans les zones des "Devices" :';
+    fontSizeLabel.textContent = t("tab1Render", "font_size_zones");
     fontSizeRow.appendChild(fontSizeLabel);
     
-    // Définit les sections
     const fontSizeSections = [
-      { label: t("tab1Render", "in_header"), path: 'header', id: 'header' }, // 'dans le header'
-      { label: t("tab1Render", "in_devices"), path: 'sensor', id: 'sensor' }, // 'dans le Devices'
-      { label: t("tab1Render", "in_footer"), path: 'footer', id: 'footer' }, // 'dans le footer'
+      { label: t("tab1Render", "in_header"), path: 'header', id: 'header' }, 
+      { label: t("tab1Render", "in_devices"), path: 'sensor', id: 'sensor' }, 
+      { label: t("tab1Render", "in_footer"), path: 'footer', id: 'footer' }, 
     ];
     
-    // Boucle sur chaque section
     fontSizeSections.forEach(section => {
       const sectionRow = document.createElement('div');
       sectionRow.classList.add('row');
@@ -193,7 +171,6 @@ export function tab1Render(appendTo) {
       textfield.setAttribute('min', 1);
       textfield.setAttribute('step', 1);
     
-      // Vérifie si la clé existe avant de définir sa valeur ou d'activer le champ
       if (appendTo._config.styles && appendTo._config.styles[section.path]) {
         if (appendTo._config.styles[section.path] === 'auto') {
           textfield.setAttribute('disabled', '');
@@ -213,7 +190,6 @@ export function tab1Render(appendTo) {
       fontSwitch.setAttribute('data-path', `styles.${section.path}`);
       fontSwitch.setAttribute('data-group', section.path);
     
-      // Activer le switch uniquement si la clé existe et que sa valeur est "auto"
       if (appendTo._config.styles && appendTo._config.styles[section.path] === 'auto') {
         fontSwitch.setAttribute('checked', '');
       }
@@ -227,14 +203,10 @@ export function tab1Render(appendTo) {
     
     editorDiv.appendChild(fontSizeRow);
     
-    // Ajouter le contenu au DOM
     tabContent.appendChild(editorDiv);
 
 }
 
-/**********************************************/
-/* fonction de rendu du contenu de tabs col : */
-/**********************************************/
 export function tabColRender(col, appendTo) {
     
     const boxCol = appendTo._config.param[`boxCol${col}`] ?? 1;
@@ -242,7 +214,7 @@ export function tabColRender(col, appendTo) {
     const tabContent = appendTo.shadowRoot.querySelector('#tab-content');
     tabContent.innerHTML = '';
 
-    let tabsHTML = ''; // Initialise une variable pour stocker les onglets
+    let tabsHTML = '';
     for (let i = 1; i <= boxCol; i++) {
         tabsHTML += `<sl-tab slot="nav" panel="anchor" label="1-${i}" data-tab="${i - 1}">${col}-${i}</sl-tab>`;
     }
@@ -263,45 +235,34 @@ export function tabColRender(col, appendTo) {
             
     const tabBar = tabContent.querySelector('#subLink-container');
     if (tabBar && typeof appendTo._currentSubTab === 'number') {
-        tabBar.activeIndex = appendTo._currentSubTab; // Définit l'onglet actif
+        tabBar.activeIndex = appendTo._currentSubTab; 
     }
     
     attachSubLinkClick(appendTo);
     renderSubTabContent(col, appendTo);
 }
 
-/************************************************/
-/* fonction d'appel de la fonction de rendu des */
-/* sous tabs                                    */
-/* me demandez pas pourquoi j'ai fait deux      */
-/* foncions, je ne saisplus                     */
-/************************************************/
 export function renderSubTabContent(col, appendTo) {
     const subTabContent = appendTo.shadowRoot.querySelector('#subTab-content');
     const boxId = `${col}-${appendTo._currentSubTab+1}`;
     subtabRender(boxId, appendTo._config, appendTo._hass, appendTo);
-    attachInputs(appendTo); // Appeler la fonction attachInputs déjà présente
+    attachInputs(appendTo); 
 }
 
-/************************************************/
-/* fonction de rendu du contenu des sous-tabs : */
-/* toutes les zones de conf des box en somme    */
-/************************************************/
+
 export function subtabRender(box, config, hass, appendTo) {
     
     const subTabContent = appendTo.shadowRoot.querySelector('#subTab-content');
     
     let leftQty = 0, topQty = 0, bottomQty = 0, rightQty = 0;
     
-    // Vérifier si les ancres existent dans la configuration
     const anchors = config?.devices?.[box]?.anchors ? config?.devices?.[box]?.anchors.split(', ') : [];
     
     let thisAllAnchors = [];
 
-    // Parcourir les ancres pour extraire les quantités par côté
     anchors.forEach((anchor) => {
-        const [side, qtyStr] = anchor.split('-'); // Exemple : "L-2" devient ["L", "2"]
-        const qty = parseInt(qtyStr, 10); // Convertir la quantité en nombre
+        const [side, qtyStr] = anchor.split('-');
+        const qty = parseInt(qtyStr, 10);
     
         if (side === 'L') leftQty += qty;
         else if (side === 'T') topQty += qty;
@@ -320,7 +281,6 @@ export function subtabRender(box, config, hass, appendTo) {
     
     subTabContent.innerHTML = `
         
-        <!-- ICON ET NOM -->
         <ha-expansion-panel expanded outlined id="subPanel_header" header="${t("subtabRender", "header_title")}">
             <div class="col inner">
                 <div class="row">
@@ -341,7 +301,6 @@ export function subtabRender(box, config, hass, appendTo) {
             </div>
         </ha-expansion-panel>
         
-        <!-- ENTITE 1 et 2-->
         <ha-expansion-panel outlined id="subPanel_entities" header="${t("subtabRender", "sensor_title")}">
             <div class="col inner">
                 <ha-entity-picker
@@ -356,8 +315,7 @@ export function subtabRender(box, config, hass, appendTo) {
                     data-path="devices.${box}.entity2"
                 >
                 </ha-entity-picker>
-    
-                <!-- SWITCHS GRAPH ET GAUGE -->
+
                 <div class="row">
                     <div class="row cell">
                         ${t("subtabRender", "enable_graph")} :
@@ -376,8 +334,7 @@ export function subtabRender(box, config, hass, appendTo) {
                 </div>
             </div>
         </ha-expansion-panel>
-        
-        <!-- HEADER ET FOOTER 1 -->
+    
         <ha-expansion-panel outlined id="subPanel_entities2" header="${t("subtabRender", "header_footer_title")}">
             <div class="col inner">
                 <div class="row">
@@ -395,7 +352,6 @@ export function subtabRender(box, config, hass, appendTo) {
                     </ha-entity-picker>
                 </div>
                 
-                <!-- FOOTER 2 ET 3 -->
                 <div class="row">
                     <ha-entity-picker
                         label="${t("subtabRender", "entity2_footer")}"
@@ -413,7 +369,6 @@ export function subtabRender(box, config, hass, appendTo) {
             </div>
         </ha-expansion-panel>
         
-        <!-- ANCHORS -->
         <ha-expansion-panel outlined id="subPanel_anchors" header="${t("subtabRender", "anchor_title")}">
             <div class="col inner">
                 <div class="row">
@@ -467,7 +422,6 @@ export function subtabRender(box, config, hass, appendTo) {
             </div>
         </ha-expansion-panel>
         
-        <!-- LINKS -->
         <div class="contMenu">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="headerMenu">${t("subtabRender", "add_links")}</div>
@@ -479,7 +433,6 @@ export function subtabRender(box, config, hass, appendTo) {
         </div>
     `;
     
-    // Réappliquer l'attribut "expanded" aux panneaux qui l'avaient avant
     expandedPanelsState.forEach(id => {
         const panel = subTabContent.querySelector(`ha-expansion-panel#${id}`);
         if (panel) {
@@ -502,13 +455,11 @@ export function subtabRender(box, config, hass, appendTo) {
 	const anchorbottom = subTabContent.querySelector('#anchor_bottom');
 	const anchorRight = subTabContent.querySelector('#anchor_right');
 	
-	// code pour recuperer les valeurs pour chaque cote
 	anchorLeft.value = leftQty;
     anchorTop.value = topQty;
     anchorbottom.value = bottomQty;
     anchorRight.value = rightQty;
     
-    // Après avoir inséré le contenu, configure les valeurs pour ha-icon-picker et ha-entity-picker
     nameField.value = config?.devices?.[box]?.name ?? "";
     iconPicker.value = config?.devices?.[box]?.icon ?? ""; 
     entityPicker.value = config?.devices?.[box]?.entity ?? "";
@@ -518,13 +469,13 @@ export function subtabRender(box, config, hass, appendTo) {
     footerEntity2.value = config?.devices?.[box]?.footerEntity2 ?? "";
     footerEntity3.value = config?.devices?.[box]?.footerEntity3 ?? "";
     
-    iconPicker.hass = hass; // Passe l'objet directement ici
-    entityPicker.hass = hass; // Passe l'objet directement ici
-    entity2Picker.hass = hass; // Passe l'objet directement ici
-    headerEntity.hass = hass; // Passe l'objet directement ici  
-    footerEntity1.hass = hass; // Passe l'objet directement ici
-    footerEntity2.hass = hass; // Passe l'objet directement ici
-    footerEntity3.hass = hass; // Passe l'objet directement ici
+    iconPicker.hass = hass; 
+    entityPicker.hass = hass;
+    entity2Picker.hass = hass; 
+    headerEntity.hass = hass; 
+    footerEntity1.hass = hass; 
+    footerEntity2.hass = hass; 
+    footerEntity3.hass = hass; 
            
     if (config?.devices?.[box]?.graph === true) graphSwitch.setAttribute('checked', '');
     
@@ -554,15 +505,14 @@ export function subtabRender(box, config, hass, appendTo) {
     subTabContent.querySelectorAll("ha-expansion-panel").forEach(panel => {
             panel.addEventListener("expanded-changed", (event) => {
                 if (event.detail.expanded) {
-                    expandedPanelsState.add(panel.id); // Ajoute l'ID du panel s'il est expandu
+                    expandedPanelsState.add(panel.id); 
                 } else {
-                    expandedPanelsState.delete(panel.id); // Supprime s'il est refermé
+                    expandedPanelsState.delete(panel.id); 
                 }
             });
         });
     }
     
-    // Appelle cette fonction au chargement initial pour capturer les événements
     trackExpansionState();
 }
 
@@ -570,16 +520,16 @@ export function getAllAnchorsExceptCurrent(config, currentBox) {
     let allAnchors = [];
 
     Object.entries(config.devices || {}).forEach(([boxKey, device]) => {
-        if (boxKey === currentBox || !device.anchors) return; // On saute le device en cours
+        if (boxKey === currentBox || !device.anchors) return; 
 
         const anchors = device.anchors.split(', ');
 
         anchors.forEach((anchor) => {
-            const [side, qtyStr] = anchor.split('-'); // Exemple : "L-2" → ["L", "2"]
+            const [side, qtyStr] = anchor.split('-'); 
             const qty = parseInt(qtyStr, 10);
 
             for (let i = 1; i <= qty; i++) {
-                allAnchors.push(`${boxKey}_${side}-${i}`); // Associer l'ancre au device
+                allAnchors.push(`${boxKey}_${side}-${i}`); 
             }
         });
     });
@@ -643,7 +593,7 @@ export function addLink(index, box, hass, thisAllAnchors, OtherAllAnchors, appen
     `;
     
     const startLink = panel.querySelector(`#start_link_${index}`);
-    startLink.items = thisAllAnchors.map(anchor => ({ label: anchor, value: anchor })); // Convertit en objets
+    startLink.items = thisAllAnchors.map(anchor => ({ label: anchor, value: anchor }));
     startLink.value = appendTo._config.devices?.[box]?.link?.[index]?.start ?? "";
     
     const endLink = panel.querySelector(`#end_link_${index}`);
@@ -667,7 +617,7 @@ export function addLink(index, box, hass, thisAllAnchors, OtherAllAnchors, appen
         panel.remove();
     });
     
-    // Ajouter le panel au conteneur
+
     linkContainer.appendChild(panel);
     
     attachLinkInputs(appendTo)
@@ -676,30 +626,26 @@ export function addLink(index, box, hass, thisAllAnchors, OtherAllAnchors, appen
 
 export function attachLinkInputs(appendTo) {
         
-    // Listener pour les `ha-textfield` sauf les champs "anchor"
     appendTo.shadowRoot.querySelectorAll('ha-combo-box').forEach((comboBox) => {
         
         if (eventHandlers.has(comboBox)) {
             //console.log("Événement déjà attaché à cet élément ha-combo-box :", comboBox);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return; 
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
             const key = comboBox.dataset.path;
             let value = e.detail.value;
             
             if (!value) {
-                value = null; // Déclenche la suppression de la clé dans le YAML
+                value = null; 
             }
             
-            // Mise à jour de la config si une clé est définie
             if (key) {
                 appendTo._config = updateConfigRecursively(appendTo._config, key, value, true);
                 notifyConfigChange(appendTo);
             }
             
-            // Émettre un événement personnalisé pour signaler que la configuration a changé
             const event = new CustomEvent('config-changed', {
                 detail: { redrawRequired: true }
             });
@@ -707,170 +653,136 @@ export function attachLinkInputs(appendTo) {
 
         };
         
-        // Ajouter l'événement
         comboBox.addEventListener("value-changed", handleChange);
         
-        // Enregistrer le gestionnaire dans le WeakMap
         eventHandlers.set(comboBox, handleChange);
         
     });
     
-    // Listener pour les `ha-textfield` sauf les champs "anchor"
     appendTo.shadowRoot.querySelectorAll('ha-textfield').forEach((textField) => {
         
         if (eventHandlers.has(textField)) {
             //console.log("Événement déjà attaché à cet élément ha-textfield :", textField);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return; 
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
             const key = textField.dataset.path;
             let value = e.target.value;
     
-            // Gestion des valeurs en fonction du type de champ
             if (e.target.type === 'number') {
-                // Si c'est un champ numérique
                 if (!value || isNaN(parseInt(value, 10))) {
-                    value = null; // Déclenche la suppression de la clé dans le YAML
+                    value = null; 
                 } else {
-                    value = parseInt(value, 10); // Convertir en entier si valide
+                    value = parseInt(value, 10); 
                 }
             } else {
-                // Si c'est un champ texte, on garde la valeur telle quelle
-                value = value.trim(); // Supprime les espaces inutiles
+                value = value.trim(); 
                 if (value === "") {
-                    value = null; // Si le champ est vide, suppression dans YAML
+                    value = null; 
                 }
             }
         
-            // Mise à jour de la config si une clé est définie
             if (key) {
                 appendTo._config = updateConfigRecursively(appendTo._config, key, value, true);
                 notifyConfigChange(appendTo);
             }
             
-            // Émettre un événement personnalisé pour signaler que la configuration a changé
             const event = new CustomEvent('config-changed', {
                 detail: { redrawRequired: true }
             });
             document.dispatchEvent(event);
         };
-        
-        // Ajouter l'événement
+
         textField.addEventListener("change", handleChange);
         
-        // Enregistrer le gestionnaire dans le WeakMap
         eventHandlers.set(textField, handleChange);
         
     });
     
-    // Listener pour les `ha-switch`
     appendTo.shadowRoot.querySelectorAll('ha-switch').forEach((toggle) => {
         
         if (eventHandlers.has(toggle)) {
             //console.log("Événement déjà attaché à cet élément ha-switch :", toggle);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return;
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
             const key = toggle.dataset.path;
-            const value = e.target.checked ? true : null; // `true` si activé, `null` pour suppression
+            const value = e.target.checked ? true : null;
             
             if (key) {
-                appendTo._config = updateConfigRecursively(appendTo._config, key, value, true); // Suppression si désactivé
+                appendTo._config = updateConfigRecursively(appendTo._config, key, value, true);
                 notifyConfigChange(appendTo);
             }
             
-            // Émettre un événement personnalisé pour signaler que la configuration a changé
             const event = new CustomEvent('config-changed', {
                 detail: { redrawRequired: true }
             });
             document.dispatchEvent(event);
         };
         
-        // Ajouter l'événement
         toggle.addEventListener("change", handleChange);
         
-        // Enregistrer le gestionnaire dans le WeakMap
         eventHandlers.set(toggle, handleChange);
         
     });
 }
 
-/************************************************/
-/* fonction de creation des events attachés aux */
-/* differents inputs de l'interface puis tri et */
-/* envoi pour mise a jour du yaml               */
-/************************************************/
 export function attachInputs(appendTo) {
-        
-    // Listener pour les `ha-textfield` sauf les champs "anchor"
+    
     appendTo.shadowRoot.querySelectorAll('ha-textfield:not(.anchor)').forEach((textField) => {
         
         if (eventHandlers.has(textField)) {
             //console.log("Événement déjà attaché à cet élément ha-textfield :", textField);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return;
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
             const key = textField.dataset.path;
             let value = e.target.value;
     
-            // Gestion des valeurs en fonction du type de champ
             if (e.target.type === 'number') {
-                // Si c'est un champ numérique
                 if (!value || isNaN(parseInt(value, 10))) {
-                    value = null; // Déclenche la suppression de la clé dans le YAML
+                    value = null;
                 } else {
-                    value = parseInt(value, 10); // Convertir en entier si valide
+                    value = parseInt(value, 10);
                 }
             } else {
-                // Si c'est un champ texte, on garde la valeur telle quelle
-                value = value.trim(); // Supprime les espaces inutiles
+                value = value.trim();
                 if (value === "") {
-                    value = null; // Si le champ est vide, suppression dans YAML
+                    value = null;
                 }
             }
         
-            // Mise à jour de la config si une clé est définie
             if (key) {
                 appendTo._config = updateConfigRecursively(appendTo._config, key, value, true);
                 notifyConfigChange(appendTo);
             }
         };
         
-        // Ajouter l'événement
         textField.addEventListener("change", handleChange);
-        
-        // Enregistrer le gestionnaire dans le WeakMap
+ 
         eventHandlers.set(textField, handleChange);
         
     });
 
-    // Listener pour les champs "anchor"
     appendTo.shadowRoot.querySelectorAll('ha-textfield.anchor').forEach((textField) => {
         
         if (eventHandlers.has(textField)) {
-            return; // Ne rien faire si l'événement est déjà attaché
+            return;
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
             const key = textField.dataset.path;
     
-            // Récupérer les valeurs des champs "left", "top", "bottom", "right"
             const anchorLeft = appendTo.shadowRoot.querySelector('#anchor_left').value;
             const anchorTop = appendTo.shadowRoot.querySelector('#anchor_top').value;
             const anchorBottom = appendTo.shadowRoot.querySelector('#anchor_bottom').value;
             const anchorRight = appendTo.shadowRoot.querySelector('#anchor_right').value;
             
-            // Créer un tableau pour stocker les ancres
             let anchors = [];
             
-            // Ajouter les ancres si elles sont valides (non nulles et non égales à zéro)
             if (anchorLeft && anchorLeft !== "0") {
                 anchors.push(`L-${anchorLeft}`);
             }
@@ -884,12 +796,10 @@ export function attachInputs(appendTo) {
                 anchors.push(`R-${anchorRight}`);
             }
         
-            // Vérifier si des ancres ont été ajoutées
             if (anchors.length > 0) {
 
                 const strAnchors = anchors.join(', ');
         
-                // Enregistrer la mise à jour dans le YAML (ou structure de config)
                 appendTo._config = updateConfigRecursively(appendTo._config, key, strAnchors, true);
                 notifyConfigChange(appendTo);
             } else {
@@ -898,36 +808,31 @@ export function attachInputs(appendTo) {
             }
         };
         
-        // Ajouter l'événement
         textField.addEventListener("change", handleChange);
-        
-        // Enregistrer le gestionnaire dans le WeakMap
+   
         eventHandlers.set(textField, handleChange);
         
     });
  
-    // Listener pour les `ha-switch`
     appendTo.shadowRoot.querySelectorAll('ha-switch').forEach((toggle) => {
         
         if (eventHandlers.has(toggle)) {
             //console.log("Événement déjà attaché à cet élément ha-switch :", toggle);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return;
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
             const key = toggle.dataset.path;
-            const value = e.target.checked ? true : null; // `true` si activé, `null` pour suppression
+            const value = e.target.checked ? true : null;
             const group = toggle.dataset.group;
             const isChecked = e.target.checked;
             
             if (group) {
-                // Trouver le champ texte associé au switch
                 const textField = appendTo.shadowRoot.querySelector(`ha-textfield[data-group="${group}"]`);
                 const key2 = textField.dataset.path;
         
                 if (isChecked) {
-                  appendTo._config = updateConfigRecursively(appendTo._config, key2, "auto"); // Définir sur "auto"
+                  appendTo._config = updateConfigRecursively(appendTo._config, key2, "auto");
                 } else {
 
                     const value = textField.value && !isNaN(parseInt(textField.value, 10)) 
@@ -941,32 +846,28 @@ export function attachInputs(appendTo) {
                 
             } else {
                 if (key) {
-                    appendTo._config = updateConfigRecursively(appendTo._config, key, value, true); // Suppression si désactivé
+                    appendTo._config = updateConfigRecursively(appendTo._config, key, value, true);
                     notifyConfigChange(appendTo);
                 }
             }
         };
         
-        // Ajouter l'événement
         toggle.addEventListener("change", handleChange);
         
-        // Enregistrer le gestionnaire dans le WeakMap
         eventHandlers.set(toggle, handleChange);
         
     });
     
-    // Listener pour les `ha-radio`
     appendTo.shadowRoot.querySelectorAll('ha-radio').forEach((radio) => {
         
         if (eventHandlers.has(radio)) {
             //console.log("Événement déjà attaché à cet élément ha-radio :", radio);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return;
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
-            const key = radio.dataset.path; // Assurez-vous que le `name` correspond à la clé dans la config
-            const value = e.target.value; // 'light', 'dark', 'auto'
+            const key = radio.dataset.path;
+            const value = e.target.value; 
     
             if (key) {
                 appendTo._config = updateConfigRecursively(appendTo._config, key, value, true);
@@ -974,30 +875,25 @@ export function attachInputs(appendTo) {
             }
         };
         
-        // Ajouter l'événement
         radio.addEventListener("change", handleChange);
         
-        // Enregistrer le gestionnaire dans le WeakMap
         eventHandlers.set(radio, handleChange);
         
     });
           
-    // Listener pour les `ha-icon-picker`
     appendTo.shadowRoot.querySelectorAll('ha-icon-picker').forEach((iconPicker) => {
         
         if (eventHandlers.has(iconPicker)) {
             //console.log("Événement déjà attaché à cet élément ha-icon-picker :", iconPicker);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return;
         }
         
-        // Créer un nouveau gestionnaire d'événements
         const handleChange = (e) => {
-            const key = iconPicker.dataset.path; // Assurez-vous que le `name` correspond à la clé dans la config
+            const key = iconPicker.dataset.path;
             let value = e.detail.value;
             
-            // Si la valeur est une chaîne vide, traiter comme suppression de l'icône
             if (value === "") {
-                value = null; // Marquer pour suppression dans le YAML
+                value = null;
             }
             
             if (key) {
@@ -1006,30 +902,25 @@ export function attachInputs(appendTo) {
             }
         }
             
-        // Ajouter l'événement
         iconPicker.addEventListener("value-changed", handleChange);
         
-        // Enregistrer le gestionnaire dans le WeakMap
         eventHandlers.set(iconPicker, handleChange);
         
     });
     
-    // Listener pour les `ha-entity-picker`
     appendTo.shadowRoot.querySelectorAll('ha-entity-picker').forEach((entityPicker) => {
         
         if (eventHandlers.has(entityPicker)) {
             //console.log("Événement déjà attaché à cet élément ha-entity-picker :", entityPicker);
-            return; // Ne rien faire si l'événement est déjà attaché
+            return;
         }
-            
-        // Créer un nouveau gestionnaire d'événements
+    
         const handleChange = (e) => {
-            const key = entityPicker.dataset.path; // Assurez-vous que le `name` correspond à la clé dans la config
+            const key = entityPicker.dataset.path;
             let value = e.detail.value;
             
-            // Si la valeur est une chaîne vide, traiter comme suppression de l'icône
             if (!value || value.trim() === "") {
-                value = null; // Marquer pour suppression dans le YAML
+                value = null;
             }
             
             if (key) {
@@ -1038,22 +929,13 @@ export function attachInputs(appendTo) {
             }
         }
         
-        // Ajouter l'événement
         entityPicker.addEventListener("value-changed", handleChange);
         
-        // Enregistrer le gestionnaire dans le WeakMap
         eventHandlers.set(entityPicker, handleChange);
         
     });
     
 }
-
-/**********************************************/
-/* fonction de modification de la config yaml */
-/* en local (en fait l'array local)           */
-/* renvoi la nouvelle confif pour mod du yaml */
-/* via la fonction notifyConfigChange         */
-/**********************************************/
 export function updateConfigRecursively(obj, path, value, removeIfNull = false) {
     const cloneObject = (o) => {
         return Array.isArray(o)
@@ -1072,9 +954,9 @@ export function updateConfigRecursively(obj, path, value, removeIfNull = false) 
 
         if (i === keys.length - 1) {
             if (value === null && removeIfNull) {
-                delete current[key]; // Supprime la clé si `null` et `removeIfNull` est vrai
+                delete current[key];
             } else {
-                current[key] = value; // Définit la nouvelle valeur
+                current[key] = value;
             }
             break;
         }
@@ -1087,7 +969,6 @@ export function updateConfigRecursively(obj, path, value, removeIfNull = false) 
         current = current[key];
     }
 
-    // Suppression des clés vides (supprime les objets vides récursivement)
     const removeEmptyKeys = (obj) => {
         for (const key in obj) {
             if (obj[key] && typeof obj[key] === 'object') {
@@ -1104,9 +985,7 @@ export function updateConfigRecursively(obj, path, value, removeIfNull = false) 
     return clonedObj;
 }
 
-/***********************************/
-/* fonction de mise à jour du yaml */
-/***********************************/
+
 export function notifyConfigChange(appendTo) {
     const event = new Event('config-changed', {
         bubbles: true,
@@ -1119,10 +998,7 @@ export function notifyConfigChange(appendTo) {
     appendTo.dispatchEvent(event);
 }
 
-/********************************/
-/* fonction de gestion du click */
-/* dans les onglets principaux  */
-/********************************/
+
 export function attachLinkClick(renderTabContent, appendTo) {
     appendTo.shadowRoot.querySelectorAll('#tab-group sl-tab').forEach((link) => {
         if (eventHandlers.has(link)) {
@@ -1134,7 +1010,7 @@ export function attachLinkClick(renderTabContent, appendTo) {
             const tab = parseInt(e.currentTarget.getAttribute('data-tab'), 10);
             appendTo._currentTab = tab;
             appendTo._currentSubTab = 0;
-            renderTabContent(appendTo); // Appelle la fonction passée en paramètre
+            renderTabContent(appendTo);
         };
 
         link.addEventListener("click", handleClick);
@@ -1142,10 +1018,7 @@ export function attachLinkClick(renderTabContent, appendTo) {
     });
 }
 
-/********************************/
-/* fonction de gestion du click */
-/* dans les onglets secondaires */
-/********************************/
+
 export function attachSubLinkClick(appendTo) {
     appendTo.shadowRoot.querySelectorAll('#subTab-group sl-tab').forEach((sublink) => {
         if (eventHandlers.has(sublink)) {
@@ -1164,4 +1037,5 @@ export function attachSubLinkClick(appendTo) {
     });
 }
     
+
 
