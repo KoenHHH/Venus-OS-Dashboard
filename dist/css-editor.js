@@ -1,10 +1,18 @@
 export function css(user) {
     var css =`
     
-        #sl-tab-content {
+            #sl-tab-content {
               display: flex;
               flex-direction: column;
               height: 100%;
+              font-weight: bold;
+              text-transform: uppercase
+            }
+
+            #sl-tab {
+              font-weight: bold;
+              text-transform: uppercase;
+              padding: 0 10px;
             }
     
             .content {
@@ -100,3 +108,4 @@ export function css(user) {
 
 }
   
+
