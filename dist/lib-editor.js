@@ -216,7 +216,7 @@ export function tabColRender(col, appendTo) {
 
     let tabsHTML = '';
     for (let i = 1; i <= boxCol; i++) {
-        tabsHTML += `<sl-tab slot="nav" panel="anchor" label="1-${i}" data-tab="${i - 1}">${col}-${i}</sl-tab>`;
+        tabsHTML += `<sl-tab slot="nav" id="sl-tab" panel="anchor" label="1-${i}" data-tab="${i - 1}">${col}-${i}</sl-tab>`;
     }
             
     tabContent.innerHTML = `
@@ -227,7 +227,6 @@ export function tabColRender(col, appendTo) {
         
             <sl-tab-panel id="sl-subTab-content" name="anchor">
               <div id="subTab-content" class="subTab-content">
-                <!-- Le contenu de la section active sera affiché ici -->
               </div>
             </sl-tab-panel>
         </div>
@@ -1037,5 +1036,6 @@ export function attachSubLinkClick(appendTo) {
     });
 }
     
+
 
 
