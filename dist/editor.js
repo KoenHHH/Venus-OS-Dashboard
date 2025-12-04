@@ -26,10 +26,10 @@ class venusOsDashBoardEditor extends HTMLElement {
               </style>
             
               <sl-tab-group id="tab-group">
-                <sl-tab slot="nav" panel="conf" data-tab="0"" active>Conf.</sl-tab>
-                <sl-tab slot="nav" panel="conf" data-tab="1">Col. 1</sl-tab>
-                <sl-tab slot="nav" panel="conf" data-tab="2">Col. 2</sl-tab>
-                <sl-tab slot="nav" panel="conf" data-tab="3">Col. 3</sl-tab>
+                <sl-tab slot="nav" id="sl-tab" panel="conf" data-tab="0"" active>Conf.</sl-tab>
+                <sl-tab slot="nav" id="sl-tab" panel="conf" data-tab="1">Col. 1</sl-tab>
+                <sl-tab slot="nav" id="sl-tab" panel="conf" data-tab="2">Col. 2</sl-tab>
+                <sl-tab slot="nav" id="sl-tab" panel="conf" data-tab="3">Col. 3</sl-tab>
             
                 <sl-tab-panel id="sl-tab-content" name="conf">
                   <div id="tab-content" class="content"></div>
@@ -114,3 +114,4 @@ class venusOsDashBoardEditor extends HTMLElement {
 }
 
 customElements.define('venus-os-editor', venusOsDashBoardEditor);
+
