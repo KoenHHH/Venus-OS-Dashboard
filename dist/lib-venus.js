@@ -161,18 +161,11 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
         const divGauge = appendTo.querySelector(`#dashboard > #column-${boxId[0]} > #box_${boxId} > #gauge_${boxId}`);
         const innerContent = appendTo.querySelector(`#dashboard > #column-${boxId[0]} > #box_${boxId} > #content_${boxId}`);
                 
-        let state = hass.states[device.entity];
-        let rawValue = state ? state.state : 'N/C';
-        console.log('Raw value:', rawValue, 'Type:', typeof rawValue);
-        let value = rawValue;
-        if (rawValue !== 'N/C' && rawValue !== 'unavailable' && rawValue !== 'unknown') {
-            const numValue = parseFloat(rawValue);
-            if (!isNaN(numValue)) {
-                value = Math.round(numValue);
-                console.log('Rounded to:', value);
-            }
-        }
-        let unit = state && state.attributes.unit_of_measurement ? state.attributes.unit_of_measurement : '';
+        const state = hass.states[device.entity];
+		const rawValue = state ? state.state : 'N/C';
+		console.log('Raw value:', rawValue, 'Type:', typeof rawValue);
+		let value = formatValue(rawValue); // now uses the helper
+		const unit = state && state.attributes && state.attributes.unit_of_measurement ? state.attributes.unit_of_measurement : '';
             
         let addGauge = "";
         let addHeaderEntity = "";
@@ -248,25 +241,29 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
             }
         }
             
-        if(device.headerEntity) {
-            const stateHeaderEnt = hass.states[device.headerEntity];
-            const valueHeaderEnt = stateHeaderEnt ? stateHeaderEnt.state : '';
-            const unitvalueHeaderEnt = stateHeaderEnt && stateHeaderEnt.attributes.unit_of_measurement ? stateHeaderEnt.attributes.unit_of_measurement : '';
-                
-            addHeaderEntity = `
-                <div class="headerEntity">${valueHeaderEnt}<div class="boxUnit">${unitvalueHeaderEnt}</div></div>
-            `;
-        }
+        if (device.headerEntity) {
+		    const stateHeaderEnt = hass.states[device.headerEntity];
+		    let valueHeaderEnt = stateHeaderEnt ? stateHeaderEnt.state : '';
+		    const unitvalueHeaderEnt = stateHeaderEnt && stateHeaderEnt.attributes && stateHeaderEnt.attributes.unit_of_measurement
+		        ? stateHeaderEnt.attributes.unit_of_measurement
+		        : '';
+		    valueHeaderEnt = formatValue(valueHeaderEnt);
+		    addHeaderEntity = `
+		        <div class="headerEntity">${valueHeaderEnt}<div class="boxUnit">${unitvalueHeaderEnt}</div></div>
+		    `;
+		}
         
-        if(device.entity2) {
-            const stateEntity2 = hass.states[device.entity2];
-            const valueEntity2 = stateEntity2 ? stateEntity2.state : '';
-            const unitvalueEntity2 = stateEntity2 && stateEntity2.attributes.unit_of_measurement ? stateEntity2.attributes.unit_of_measurement : '';
-                
-            addEntity2 = `
-                <div class="boxSensor2"${addSensor2Style}>${valueEntity2}<div class="boxUnit">${unitvalueEntity2}</div></div>
-            `;
-        }
+        if (device.entity2) {
+		    const stateEntity2 = hass.states[device.entity2];
+		    let valueEntity2 = stateEntity2 ? stateEntity2.state : '';
+		    const unitvalueEntity2 = stateEntity2 && stateEntity2.attributes && stateEntity2.attributes.unit_of_measurement
+		        ? stateEntity2.attributes.unit_of_measurement
+		        : '';
+		    valueEntity2 = formatValue(valueEntity2);
+		    addEntity2 = `
+		        <div class="boxSensor2"${addSensor2Style}>${valueEntity2}<div class="boxUnit">${unitvalueEntity2}</div></div>
+		    `;
+		}
             
         if(device.footerEntity1) {
                 
@@ -974,6 +971,7 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
 
 
