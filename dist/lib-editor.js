@@ -5,7 +5,7 @@ export const eventHandlers = new WeakMap();
 let translations = {}; 
 
 // FIXED: Language configuration with fallback support
-const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'es'];
+const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'nl'];
 const DEFAULT_LANGUAGE = 'en';
 
 export async function loadTranslations(appendTo) {
@@ -1036,6 +1036,7 @@ export function attachSubLinkClick(appendTo) {
     });
 }
     
+
 
 
 
