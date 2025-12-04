@@ -132,6 +132,15 @@ function creatAnchors(colNbrs, boxNbrs, numAnchors, type, appendTo) {
 	}
 }
 
+function formatValue(raw) {
+    // Leave 'N/C', 'unavailable', 'unknown', or non-numeric strings unchanged
+    if (raw === undefined || raw === null) return '';
+    if (raw === 'N/C' || raw === 'unavailable' || raw === 'unknown') return raw;
+
+    const n = parseFloat(raw);
+    return isNaN(n) ? raw : Math.round(n);
+}
+
 export function fillBox(config, styles, isDark, hass, appendTo) {
     
     const devices = config.devices || [];
@@ -262,17 +271,26 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
         if(device.footerEntity1) {
                 
             const stateFooterEnt1 = hass.states[device.footerEntity1];
-            const valueFooterEnt1 = stateFooterEnt1 ? stateFooterEnt1.state : '';
-            const unitvalueFooterEnt1 = stateFooterEnt1 && stateFooterEnt1.attributes.unit_of_measurement ? stateFooterEnt1.attributes.unit_of_measurement : '';
-                
-            const stateFooterEnt2 = hass.states[device.footerEntity2];
-            const valueFooterEnt2 = stateFooterEnt2 ? stateFooterEnt2.state : '';
-            const unitvalueFooterEnt2 = stateFooterEnt2 && stateFooterEnt2.attributes.unit_of_measurement ? stateFooterEnt2.attributes.unit_of_measurement : '';
-                
-            const stateFooterEnt3 = hass.states[device.footerEntity3];
-            const valueFooterEnt3 = stateFooterEnt3 ? stateFooterEnt3.state : '';
-            const unitvalueFooterEnt3 = stateFooterEnt3 && stateFooterEnt3.attributes.unit_of_measurement ? stateFooterEnt3.attributes.unit_of_measurement : '';
-            
+			let valueFooterEnt1 = stateFooterEnt1 ? stateFooterEnt1.state : '';
+			const unitvalueFooterEnt1 = stateFooterEnt1 && stateFooterEnt1.attributes.unit_of_measurement
+			    ? stateFooterEnt1.attributes.unit_of_measurement
+			    : '';
+			valueFooterEnt1 = formatValue(valueFooterEnt1);
+			
+			const stateFooterEnt2 = hass.states[device.footerEntity2];
+			let valueFooterEnt2 = stateFooterEnt2 ? stateFooterEnt2.state : '';
+			const unitvalueFooterEnt2 = stateFooterEnt2 && stateFooterEnt2.attributes.unit_of_measurement
+			    ? stateFooterEnt2.attributes.unit_of_measurement
+			    : '';
+			valueFooterEnt2 = formatValue(valueFooterEnt2);
+			
+			const stateFooterEnt3 = hass.states[device.footerEntity3];
+			let valueFooterEnt3 = stateFooterEnt3 ? stateFooterEnt3.state : '';
+			const unitvalueFooterEnt3 = stateFooterEnt3 && stateFooterEnt3.attributes.unit_of_measurement
+			    ? stateFooterEnt3.attributes.unit_of_measurement
+			    : '';
+			valueFooterEnt3 = formatValue(valueFooterEnt3);
+			            
             addFooter = `
                 <div class="boxFooter"${addFooterStyle}>
                     <div class="footerCell">${valueFooterEnt1}<div class="boxUnit">${unitvalueFooterEnt1}</div></div>
@@ -956,6 +974,7 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
 
 
