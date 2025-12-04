@@ -550,8 +550,8 @@ export function addLink(index, box, hass, thisAllAnchors, OtherAllAnchors, appen
         
     panel.innerHTML = `
         <div slot="header" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>Lien ${index}</span>
-            <ha-icon-button id="add-link-button" aria-label="Ajouter un lien">
+            <span>Line ${index}</span>
+            <ha-icon-button id="add-link-button" aria-label="Add a link">
                 <ha-icon icon="mdi:trash-can" style="display: flex;"></ha-icon>
             </ha-icon-button>
         </div>
@@ -1036,6 +1036,7 @@ export function attachSubLinkClick(appendTo) {
     });
 }
     
+
 
 
 
