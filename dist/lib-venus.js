@@ -655,7 +655,7 @@ function creatLine(anchorId1, anchorId2, direction_init, isDarkTheme, appendTo) 
 		    const box = appendTo.querySelector(`#dashboard`);
 		    const boxWidth = box ? box.offsetWidth : 1000;
 		
-		    const speedFactor = 0.1; // modify speed (lower=slower)
+		    const speedFactor = 0.05; // modify speed (lower=slower)
 		    const speed = Math.max(1, boxWidth * speedFactor);
 		    const duration = pathLength / speed * 1000;
 		
@@ -980,6 +980,7 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
 
 
