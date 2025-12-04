@@ -6,7 +6,6 @@ export function css(user) {
               flex-direction: column;
               height: 100%;
               font-weight: bold;
-              text-transform: uppercase
             }
 
             #sl-tab {
@@ -108,4 +107,5 @@ export function css(user) {
 
 }
   
+
 
