@@ -600,8 +600,8 @@ function creatLine(anchorId1, anchorId2, direction_init, isDarkTheme, appendTo) 
 		const pathLength = path.getTotalLength();
 		
 		// --- NEW MULTIPLE BALLS ANIMATION SETTINGS ---
-		const spacingPx = 36;  // spacing between balls (tune this)
-		const ballRadius = 3;  // ball size (tune this)
+		const spacingPx = 20;  // spacing between balls (tune this)
+		const ballRadius = 4;  // ball size (tune this)
 		const ballCount = Math.max(1, Math.floor(pathLength / spacingPx));
 		
 		const circles = [];
@@ -980,6 +980,7 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
 
 
