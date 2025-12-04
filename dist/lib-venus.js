@@ -21,7 +21,7 @@ export function baseRender(config, appendTo) {
     		<svg id="svg_container" class="line" viewBox="0 0 1000 600" width="100%" height="100%">
     			<defs>
     				<filter id="blurEffect">
-    					<feGaussianBlur in="SourceGraphic" stdDeviation="1"/> <!-- Ajuste stdDeviation pour plus ou moins de flou -->
+    					<feGaussianBlur in="SourceGraphic" stdDeviation="1"/>
     				</filter>
     				<radialGradient id="gradientDark" cx="50%" cy="50%" r="50%">
     					<stop offset="0%" stop-color="#ffffff" stop-opacity="1"></stop>
@@ -78,7 +78,7 @@ export function addBox(col1, col2, col3, appendTo) {
                 column.appendChild(box); 
             }
         } else {
-            console.warn(`Colonne ${columnIndex + 1} introuvable.`);
+            console.warn(`Column ${columnIndex + 1} not found.`);
         }
     });
 }
@@ -971,6 +971,7 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
 
 
