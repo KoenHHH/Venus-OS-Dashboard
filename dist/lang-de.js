@@ -1,0 +1,43 @@
+export default {
+  tab1Render: {
+    theme_choice: "Kartendesign auswählen:",
+    light: "Hell",
+    dark: "Dunkel",
+    auto: "Automatisch",
+    devices_per_column: "Anzahl der „Geräte“ pro Spalte:",
+    font_size_zones: "Schriftgröße in „Geräte“-Bereichen:",
+    in_header: "im Kopfbereich",
+    in_devices: "in Geräten",
+    in_footer: "im Fußbereich",
+    font_size: "Schriftgröße"
+  },
+  subtabRender: {
+    header_title: "Konfiguration Kopfbereich",
+    icon_choice: "Symbol auswählen",
+    name_choice: "Gerätename",
+    sensor_title: "Konfiguration des Hauptsensors",
+    entity_choice: "Entität auswählen",
+    entity2_choice: "Sekundäre Entität auswählen",
+    enable_graph: "Diagramm aktivieren",
+    enable_gauge: "Anzeige in % aktivieren",
+    warning_gauge: "Kann nur aktiviert werden, wenn die Einheit % ist",
+    header_footer_title: "Konfiguration von Kopf- und Fußbereich-Sensoren",
+    entity_header: "Kopfbereich-Entität auswählen",
+    entity_footer: "Fußbereich-Entität auswählen",
+    entity2_footer: "2. Fußbereich-Entität auswählen",
+    entity3_footer: "3. Fußbereich-Entität auswählen",
+    anchor_title: "Anker hinzufügen",
+    left_qtyBox: "Links",
+    top_qtyBox: "Oben",
+    bottom_qtyBox: "Unten",
+    right_qtyBox: "Rechts",
+    add_links: "Verbindungen hinzufügen",
+    add_link: "Verbindung hinzufügen"
+  },
+  addLink: {
+    start: "Start",
+    end: "Ende",
+    entity_picker: "Entität auswählen",
+    reverse: "Richtung umkehren"
+  }
+};
