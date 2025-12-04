@@ -585,102 +585,111 @@ function creatLine(anchorId1, anchorId2, direction_init, isDarkTheme, appendTo) 
     
 	const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 
-	if (!pathData.includes("NaN")) {
-        path.setAttribute("d", pathData);
-    } else {
-        console.warn("SVG path ignored because pathData contains NaN");
-        return;
-    }
-    
-    path.setAttribute("fill", "none");
-	path.setAttribute("stroke-width", "2");
-	
-	const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-	circle.setAttribute("class", "ball");
-	circle.setAttribute("cx", coords1.x);
-	circle.setAttribute("cy", coords1.y); 
-	circle.setAttribute("r", "4");
-	if(isDarkTheme) circle.setAttribute("fill", "url(#gradientDark)"); 
-	else circle.setAttribute("fill", "url(#gradientLight)"); 
-	
-	pathContainer.appendChild(path);
-	circContainer.appendChild(circle);
-	
-	const controls = animateBallAlongPath(anchorId1, path, circle, appendTo);
-	
-	pathControls.set(anchorId1, controls);
-	
-	directionControls.set(anchorId1, direction_init);
-}
-
-function getAnchorCoordinates(anchorId, appendTo) {
-	
-	const columnIndex = anchorId[0];
-	const boxIndex = anchorId.substring(0, 3);
-	
-	const anchor = appendTo.querySelector(`#dashboard > #column-${columnIndex} > #box_${boxIndex} > #anchor_${anchorId}`);
-	const container = appendTo.querySelector(`#dashboard`);
-	
-	if (!anchor || !container) {
-		console.error("Anchor or container not found : " + anchorId);
-		return null;
-	}
-	
-	const anchorRect = anchor.getBoundingClientRect();
-	
-	const containerRect = container.getBoundingClientRect();
-	
-	const relativeX = (anchorRect.left - containerRect.left + anchorRect.width / 2)*1000/containerRect.width;
-	const relativeY = (anchorRect.top - containerRect.top + anchorRect.height / 2)*600/containerRect.height;
-	
-	return { x: parseFloat(relativeX.toFixed(2)), y: parseFloat(relativeY.toFixed(2)) };
-}
-
-
-function animateBallAlongPath(anchorId1, path, circle, appendTo) {
-	
-	let direction = directionControls.get(anchorId1);
-	
-	const pathLength = path.getTotalLength(); 
-	
-	const box = appendTo.querySelector(`#dashboard`);
-	const boxWidth = box.offsetWidth;
-
-	const speed = boxWidth/10; 
-	const duration = pathLength / speed * 1000;
-	let startTime;
-	
-	function reverseDirection(cmd) {
-	    const directionInit = directionControls.get(anchorId1);
-		direction = directionInit*cmd; 
-	}
-	
-	function moveBall(time) {
-		if (!startTime) startTime = time;
-		
-		const elapsed = time - startTime; 
-		var progress = (elapsed % duration) / duration; 
-		
-		if (direction == -1) {
-			progress = 1 - progress; 
-		} if (direction == 0) {
-			progress = 0; 
+		if (!pathData.includes("NaN")) {
+		    path.setAttribute("d", pathData);
+		} else {
+		    console.warn("SVG path ignored because pathData contains NaN");
+		    return;
 		}
 		
-		const point = path.getPointAtLength(progress * pathLength);
+		path.setAttribute("fill", "none");
+		path.setAttribute("stroke-width", "2");
 		
-		circle.setAttribute("cx", point.x);
-		circle.setAttribute("cy", point.y);
+		pathContainer.appendChild(path);
 		
-		requestAnimationFrame(moveBall);
-	}
-	
-	requestAnimationFrame(moveBall);
-
-	return {
-		reverse: reverseDirection,
-	};
-}
+		const pathLength = path.getTotalLength();
+		
+		// --- NEW MULTIPLE BALLS ANIMATION SETTINGS ---
+		const spacingPx = 36;  // spacing between balls (tune this)
+		const ballRadius = 3;  // ball size (tune this)
+		const ballCount = Math.max(1, Math.floor(pathLength / spacingPx));
+		
+		const circles = [];
+		for (let i = 0; i < ballCount; i++) {
+		    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+		    circle.setAttribute("class", "ball");
+		    circle.setAttribute("r", String(ballRadius));
+		    circle.setAttribute("cx", coords1.x);
+		    circle.setAttribute("cy", coords1.y);
+		
+		    if (isDarkTheme) circle.setAttribute("fill", "url(#gradientDark)");
+		    else circle.setAttribute("fill", "url(#gradientLight)");
+		
+		    circContainer.appendChild(circle);
+		    circles.push(circle);
+		}
+		
+		const controls = animateBallsAlongPath(anchorId1, path, circles, appendTo);
+		
+		pathControls.set(anchorId1, controls);
+		
+		directionControls.set(anchorId1, direction_init);
+		}
+		
+		function getAnchorCoordinates(anchorId, appendTo) {
+		    const columnIndex = anchorId[0];
+		    const boxIndex = anchorId.substring(0, 3);
+		
+		    const anchor = appendTo.querySelector(`#dashboard > #column-${columnIndex} > #box_${boxIndex} > #anchor_${anchorId}`);
+		    const container = appendTo.querySelector(`#dashboard`);
+		
+		    if (!anchor || !container) {
+		        console.error("Anchor or container not found : " + anchorId);
+		        return null;
+		    }
+		
+		    const anchorRect = anchor.getBoundingClientRect();
+		    const containerRect = container.getBoundingClientRect();
+		
+		    const relativeX = (anchorRect.left - containerRect.left + anchorRect.width / 2) * 1000 / containerRect.width;
+		    const relativeY = (anchorRect.top - containerRect.top + anchorRect.height / 2) * 600 / containerRect.height;
+		
+		    return { x: parseFloat(relativeX.toFixed(2)), y: parseFloat(relativeY.toFixed(2)) };
+		}
+		
+		// --- NEW MULTI-BALL ANIMATION FUNCTION ---
+		function animateBallsAlongPath(anchorId1, path, circles, appendTo) {
+		    let direction = directionControls.get(anchorId1) || 1;
+		
+		    const pathLength = path.getTotalLength();
+		    const box = appendTo.querySelector(`#dashboard`);
+		    const boxWidth = box ? box.offsetWidth : 1000;
+		
+		    const speedFactor = 0.1; // modify speed (lower=slower)
+		    const speed = Math.max(1, boxWidth * speedFactor);
+		    const duration = pathLength / speed * 1000;
+		
+		    let startTime = null;
+		
+		    function reverseDirection(cmd) {
+		        const directionInit = directionControls.get(anchorId1) ?? 1;
+		        direction = directionInit * cmd;
+		    }
+		
+		    function moveBalls(time) {
+		        if (!startTime) startTime = time;
+		        const elapsed = time - startTime;
+		        let baseProgress = ((elapsed % duration) / duration);
+		
+		        const n = circles.length;
+		        for (let i = 0; i < n; i++) {
+		            let p = baseProgress + (i / n);
+		            p = p - Math.floor(p);
+		            if (direction === -1) p = 1 - p;
+		
+		            const point = path.getPointAtLength(p * pathLength);
+		            const c = circles[i];
+		            c.setAttribute("cx", point.x);
+		            c.setAttribute("cy", point.y);
+		        }
+		
+		        requestAnimationFrame(moveBalls);
+		    }
+		
+		    requestAnimationFrame(moveBalls);
+		
+		    return { reverse: reverseDirection };
+		}
 
 export function checkForReverse(devices, hass) {
     
@@ -971,6 +980,7 @@ export function getDefaultConfig(hass) {
         },
     }
 }
+
 
 
 
