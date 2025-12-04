@@ -1,13 +1,22 @@
 # Venus OS Dashboard
 
-![Overview](https://github.com/user-attachments/assets/5c450676-acba-4c8b-a558-dc36ff85c208)
+![Home Assistant](https://img.shields.io/badge/home%20assistant-%2341BDF5.svg?style=for-the-badge&logo=home-assistant&logoColor=white)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/hacs/integration)
+![GitHub Release](https://img.shields.io/github/v/release/KoenHHH/Venus-OS-Dashboard?style=for-the-badge&logo=github)
+![GitHub Pre-Release](https://img.shields.io/github/v/release/KoenHHH/Venus-OS-Dashboard?include_prereleases&style=for-the-badge&logo=github&label=PRERELEASE)
+![GitHub Tag](https://img.shields.io/github/v/tag/KoenHHH/Venus-OS-Dashboard?style=for-the-badge&color=yellow)
+![GitHub branch status](https://img.shields.io/github/checks-status/KoenHHH/Venus-OS-Dashboard/main?style=for-the-badge)
+![stars](https://img.shields.io/github/stars/KoenHHH/Venus-OS-Dashboard.svg?style=for-the-badge)
+![home](https://img.shields.io/github/last-commit/KoenHHH/Venus-OS-Dashboard.svg?style=for-the-badge)
+![commits](https://img.shields.io/github/commit-activity/y/KoenHHH/Venus-OS-Dashboard?style=for-the-badge)
+![license](https://img.shields.io/github/license/KoenHHH/Venus-OS-Dashboard?style=for-the-badge&logo=opensourceinitiative&logoColor=white&color=0080ff)
 
-<img src="https://github.com/user-attachments/assets/7148bde1-ef7e-4869-b67a-e442fc76ba14" width="300">
-<img src="https://github.com/user-attachments/assets/16c48420-e28a-472e-b3df-fe50922d1e70" width="300">
+![victron](https://github.com/user-attachments/assets/cf84bf5c-2b7a-4634-9634-8b4ec642473f)
 
 ## **What is Venus OS Dashboard ?**
 
-Venus OS Dashboard is a card that replicates the look and feel of the Venus OS GUI v2 for [Home Assistant][home-assistant] Dashboard UI.
+Venus OS Dashboard is a card that replicates the look and feel of the Venus OS GUI v2 from Victron VRM.
+First card is the official VRM APP, the second one is this card.
 
 ---
 
@@ -27,7 +36,7 @@ Venus OS Dashboard is a card that replicates the look and feel of the Venus OS G
 
 ### HACS
 
-*Not available yet (coming soon).*
+[![HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=KoenHHH&repository=Venus-OS-Dashboard&category=plugin)
 
 1. Make sure [HACS](https://hacs.xyz/) is installed in your Home Assistant instance
 2. Add this repository as a custom repository in HACS:
