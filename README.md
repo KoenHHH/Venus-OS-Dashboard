@@ -30,6 +30,20 @@ First card is the official VRM APP, the second one is this card.
 -   🌓 Supports both light and dark themes
 -   🌎 Internationalization
 
+## Behavioral / Feature Differences
+
+| Feature / Area | Original Repo | Fork (Your Version) |
+|----------------|:-------------:|-------------------:|
+| Power flow animation | Single moving ball | Multi-ball VRM-style dot train (`spacingPx`, `ballRadius`, `speedFactor`) |
+| Numeric formatting / rounding | Only main sensor rounded | All values rounded: header, entity2, footer (`formatValue()`) |
+| Localization | Mixed / partially French | English logs + added Dutch & German translations |
+| Documentation / README | Minimal, no YAML config | Full configuration reference, MQTT guide, troubleshooting |
+| Example layout | Not included | Added `example.yaml` (Grid, Solar, Inverter, Loads, Battery) |
+| Editor / UX | Some untranslated UI | Improved editor UI, translated strings |
+| Runtime validation | Less validation of anchors/paths | Added NaN safeguards & error handling |
+| VRM visual match | Limited resemblance | Updated icons, animations, sizing — closer to VRM style |
+
+
 ---
 
 ## **Installation**
