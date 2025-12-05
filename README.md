@@ -41,7 +41,7 @@ First card is the official VRM APP, the second one is this card.
 | Example layout | Not included | Added `example.yaml` (Grid, Solar, Inverter, Loads, Battery) |
 | Editor / UX | Some untranslated UI | Improved editor UI, translated strings |
 | Runtime validation | Less validation of anchors/paths | Added NaN safeguards & error handling |
-| VRM visual match | Limited resemblance | Updated icons, animations, sizing — closer to VRM style |
+| VRM visual match | resemblance | Updated icons, animations, sizing — closer to VRM style |
 
 
 ---
@@ -142,7 +142,7 @@ A map of device boxes keyed by "<column>-<box>" (for example 1-1, 2-1, 3-2). Eac
    - platform: mqtt
      unique_id: cerbo_ac_consumption_l1_power
      name: "AC Consumption L1 Power"
-     state_topic: "cerbo/N/c0619ab3c7c5/system/0/Ac/Consumption/L1/Power"
+     state_topic: "cerbo/N/<id>/system/0/Ac/Consumption/L1/Power"
      device_class: power
      state_class: measurement
      unit_of_measurement: "W"
@@ -151,7 +151,7 @@ A map of device boxes keyed by "<column>-<box>" (for example 1-1, 2-1, 3-2). Eac
    - platform: mqtt
      unique_id: cerbo_ac_consumption_on_input_l1_power
      name: "AC Consumption On Input L1 Power"
-     state_topic: "cerbo/N/c0619ab3c7c5/system/0/Ac/ConsumptionOnInput/L1/Power"
+     state_topic: "cerbo/N/<id>/system/0/Ac/ConsumptionOnInput/L1/Power"
      device_class: power
      state_class: measurement
      unit_of_measurement: "W"
