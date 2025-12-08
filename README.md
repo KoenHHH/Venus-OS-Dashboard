@@ -32,7 +32,7 @@ First card is the official VRM APP, the second one is this card.
 
 ## Behavioral / Feature Differences
 
-| Feature / Area | Original Repo | Fork (Your Version) |
+| Feature / Area | Original Repo | Fork |
 |----------------|:-------------:|-------------------:|
 | Power flow animation | Single moving ball | Multi-ball VRM-style dot train (`spacingPx`, `ballRadius`, `speedFactor`) |
 | Numeric formatting / rounding | Only main sensor rounded | All values rounded: header, entity2, footer (`formatValue()`) |
