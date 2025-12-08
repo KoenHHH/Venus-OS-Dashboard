@@ -18,9 +18,9 @@ devices:
         start: R-1
         end: 2-1_L-1
         entity: sensor.grid_total
-    footerEntity1: sensor.grid_l1_power
-    footerEntity2: sensor.grid_l2_power
-    footerEntity3: sensor.grid_l3_power
+    footerEntity1: sensor.em540_ethernet_em540_grid_l1_power
+    footerEntity2: sensor.em540_ethernet_em540_grid_l2_power
+    footerEntity3: sensor.em540_ethernet_em540_grid_l3_power
     graph: true
     entity: sensor.grid_total
   1-2:
@@ -29,12 +29,13 @@ devices:
     link:
       "1":
         start: R-1
-        end: 2-1_B-1
+        end: 2-2_L-1
+        entity: sensor.solarcharger_totalsolar
     icon: mdi:white-balance-sunny
     entity: sensor.solar_yield_power_total
-    footerEntity1: sensor.victron_mqtt_c0619ab3c7c5_solarcharger_0_solarcharger_yield_power
-    footerEntity2: sensor.victron_mqtt_c0619ab3c7c5_solarcharger_1_solarcharger_yield_power
-    footerEntity3: sensor.victron_mqtt_c0619ab3c7c5_solarcharger_2_solarcharger_yield_power
+    footerEntity1: sensor.victron_mqtt_solarcharger_0_solarcharger_yield_power
+    footerEntity2: sensor.victron_mqtt_solarcharger_1_solarcharger_yield_power
+    footerEntity3: sensor.victron_mqtt_solarcharger_2_solarcharger_yield_power
     graph: true
   2-1:
     name: Inverter/Charger
@@ -44,8 +45,19 @@ devices:
     link:
       "1":
         start: B-1
-        end: 1-2_R-1
+        end: 2-2_T-1
         entity: sensor.cerbo_gx_battery_power
+  2-2:
+    name: Battery
+    icon: phu:solar-battery-15
+    entity: sensor.victron_system_battery_soc
+    footerEntity1: sensor.victron_mqtt_battery_voltage
+    footerEntity2: sensor.victron_mqtt_battery_current
+    footerEntity3: sensor.victron_system_battery_power
+    graph: true
+    gauge: true
+    headerEntity: sensor.cerbo_gx_battery_temperature
+    anchors: L-1, T-1        
   3-1:
     name: AC Loads
     anchors: L-1
@@ -54,6 +66,7 @@ devices:
         start: L-1
         end: 2-1_R-1
         entity: sensor.ac_load_total_alt
+        inv: true
     icon: mdi:current-ac
     footerEntity1: sensor.cerbo_gx_ac_consumption_on_input_l1_power
     footerEntity2: sensor.cerbo_gx_ac_consumption_on_input_l2_power
@@ -67,7 +80,7 @@ devices:
       "1":
         start: L-1
         end: 2-1_R-1
-        inv: "true"
+        inv: true
         entity: sensor.essential_loads_total
     icon: mdi:current-ac
     footerEntity1: sensor.cerbo_gx_ac_consumption_l1_power
@@ -75,13 +88,3 @@ devices:
     footerEntity3: sensor.cerbo_gx_ac_consumption_l3_power
     entity: sensor.essential_loads_total
     graph: true
-  2-2:
-    name: Battery
-    icon: phu:solar-battery-15
-    entity: sensor.victron_system_battery_soc_2
-    footerEntity1: sensor.victron_mqtt_battery_voltage
-    footerEntity2: sensor.victron_mqtt_battery_current
-    footerEntity3: sensor.victron_system_battery_power
-    graph: true
-    gauge: true
-    headerEntity: sensor.cerbo_gx_battery_temperature
