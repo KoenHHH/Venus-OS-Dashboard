@@ -119,6 +119,7 @@ export function cssDataDark(user) {
 		
 		.ball {
 			z-index: 1000;
+			transition: opacity 0.3s ease;
 		}
 		
         .content {
@@ -249,4 +250,5 @@ export function cssDataDark(user) {
 
 }
   
+
 
