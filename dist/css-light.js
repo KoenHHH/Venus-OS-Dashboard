@@ -118,6 +118,7 @@ export function cssDataLight(user) {
 		
 		.ball {
 			z-index: 1000;
+			transition: opacity 0.3s ease;
 		}
 		
 
@@ -249,4 +250,5 @@ export function cssDataLight(user) {
 
 }
   
+
 
