@@ -11,12 +11,11 @@
 ![commits](https://img.shields.io/github/commit-activity/y/KoenHHH/Venus-OS-Dashboard?style=for-the-badge)
 ![license](https://img.shields.io/github/license/KoenHHH/Venus-OS-Dashboard?style=for-the-badge&logo=opensourceinitiative&logoColor=white&color=0080ff)
 
-![venus](https://github.com/user-attachments/assets/55bf25d8-85a2-4ee1-a652-a2e915e4d57e)
+![venus](https://github.com/user-attachments/assets/99769b70-01f9-480e-88c5-cd910e1b6986)
 
 ## **What is Venus OS Dashboard ?**
 
 Venus OS Dashboard is a card that replicates the look and feel of the Venus OS GUI v2 from Victron VRM.
-First card is the official VRM APP, the second one is this card.
 
 ---
 
@@ -35,7 +34,7 @@ First card is the official VRM APP, the second one is this card.
 | Feature / Area | Original Repo | Fork |
 |----------------|:-------------:|-------------------:|
 | Power flow animation | Single moving ball | Multi-ball VRM-style dot train (`spacingPx`, `ballRadius`, `speedFactor`) |
-| Numeric formatting / rounding | Only main sensor rounded | All values rounded: header, entity2, footer (`formatValue()`) |
+| Numeric formatting / rounding | Only main sensor rounded | All values rounded: header, entity2, footer(adjustable in GUI) (`formatValue()`) |
 | Localization | Mixed / partially French | English logs + added Dutch & German translations |
 | Documentation / README | Minimal, no YAML config | Full configuration reference, MQTT guide, troubleshooting |
 | Example layout | Not included | Added `example.yaml` (Grid, Solar, Inverter, Loads, Battery) |
@@ -87,6 +86,31 @@ Venus OS Dashboard can be configured using Dashboard UI editor.
 - theme — "dark", "light", or "auto".
 - styles — sizing controls:
 - header, sensor, footer — "auto" or a pixel value (e.g. 16). "auto" adapts based on box width.
+
+### Animation Threshold
+
+The animationThreshold parameter controls when the animated balls on connection lines appear or disappear:
+
+When power flow is above the threshold (in absolute value), balls are visible and animate
+When power flow is below the threshold, balls fade out and disappear
+Default value: 5W - adjust this based on your system's minimum meaningful power flow
+Works with both positive and negative values (grid import/export, battery charge/discharge)
+
+### Example use cases:
+
+Set to 0 to always show animation (original behavior)
+Set to 1 to hide when no power draw
+Set to 10 to hide animation during standby/idle periods
+Set to 50 for systems where small power flows are noise
+
+### Footer Decimals
+
+The footerDecimals parameter controls the precision of footer entity values:
+
+0 (default): Integer values only - 150 W, 45 A, 98 %
+1: One decimal place - 150.5 W, 45.2 A, 98.3 %
+2: Two decimal places - 150.52 W, 45.23 A, 98.35 %
+3: Three decimal places - 150.523 W, 45.234 A, 98.351 %
 
 ### devices (required)
 
