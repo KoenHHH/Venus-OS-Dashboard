@@ -4,31 +4,25 @@ export const eventHandlers = new WeakMap();
 
 let translations = {}; 
 
-// FIXED: Language configuration with fallback support
 const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'nl'];
 const DEFAULT_LANGUAGE = 'en';
 
 export async function loadTranslations(appendTo) {
-    // Get requested language from Home Assistant, normalize it
     const requestedLang = appendTo._hass?.language || DEFAULT_LANGUAGE;
     const baseLang = requestedLang.split('-')[0].toLowerCase();
     
-    // Check if language is supported, fallback to English if not
     const lang = SUPPORTED_LANGUAGES.includes(baseLang) ? baseLang : DEFAULT_LANGUAGE;
     
-    // Log fallback for debugging
     if (lang !== baseLang) {
         console.info(`[Venus OS Dashboard] Language '${requestedLang}' not supported, using '${lang}'`);
     }
     
     try {
-        // Try to load the selected language file
         const response = await import(`./lang-${lang}.js`);
         translations = response.default;
     } catch (error) {
         console.error(`[Venus OS Dashboard] Failed to load language '${lang}':`, error);
         
-        // If loading fails and it's not already English, try English as final fallback
         if (lang !== DEFAULT_LANGUAGE) {
             try {
                 console.warn(`[Venus OS Dashboard] Falling back to ${DEFAULT_LANGUAGE}`);
@@ -56,22 +50,7 @@ export function tab1Render(appendTo) {
     const editorDiv = document.createElement('div');
     editorDiv.classList.add('editor');
     
-    /*// Mode Demo
-    const demoRow = document.createElement('div');
-    demoRow.classList.add('row');
-    const demoLabel = document.createElement('div');
-    demoLabel.classList.add('cell', 'left');
-    demoLabel.textContent = t("tab1Render", "demo_mode");//'Mode Demo';
-    const demoSwitchContainer = document.createElement('div');
-    demoSwitchContainer.classList.add('cell', 'right');
-    const demoSwitch = document.createElement('ha-switch');
-    demoSwitch.setAttribute('data-path', 'demo');
-    if (appendTo._config.demo === true) demoSwitch.setAttribute('checked', '');
-    demoSwitchContainer.appendChild(demoSwitch);
-    demoRow.appendChild(demoLabel);
-    demoRow.appendChild(demoSwitchContainer);
-    editorDiv.appendChild(demoRow);*/
-    
+    // Theme selection
     const themeRow = document.createElement('div');
     themeRow.classList.add('col');
     const themeLabel = document.createElement('div');
@@ -104,6 +83,7 @@ export function tab1Render(appendTo) {
     themeRow.appendChild(radioGroup);
     editorDiv.appendChild(themeRow);
 
+    // Devices per column
     const devicesRow = document.createElement('div');
     devicesRow.classList.add('col');
     const devicesLabel = document.createElement('div');
@@ -135,6 +115,60 @@ export function tab1Render(appendTo) {
     devicesRow.appendChild(devicesRowContainer);
     editorDiv.appendChild(devicesRow);
     
+    // Animation threshold setting
+    const thresholdRow = document.createElement('div');
+    thresholdRow.classList.add('col');
+    const thresholdLabel = document.createElement('div');
+    thresholdLabel.classList.add('left');
+    thresholdLabel.textContent = t("tab1Render", "animation_threshold");
+    thresholdLabel.setAttribute('title', t("tab1Render", "animation_threshold_help"));
+    
+    const thresholdContainer = document.createElement('div');
+    thresholdContainer.classList.add('row');
+    const thresholdField = document.createElement('ha-textfield');
+    thresholdField.classList.add('cell');
+    thresholdField.setAttribute('id', 'animationThreshold');
+    thresholdField.setAttribute('data-path', 'param.animationThreshold');
+    thresholdField.setAttribute('label', t("tab1Render", "animation_threshold"));
+    thresholdField.setAttribute('value', appendTo._config.param?.animationThreshold ?? 5);
+    thresholdField.setAttribute('type', 'number');
+    thresholdField.setAttribute('min', 0);
+    thresholdField.setAttribute('step', 1);
+    thresholdField.setAttribute('helper-text', t("tab1Render", "animation_threshold_help"));
+    thresholdContainer.appendChild(thresholdField);
+    
+    thresholdRow.appendChild(thresholdLabel);
+    thresholdRow.appendChild(thresholdContainer);
+    editorDiv.appendChild(thresholdRow);
+    
+    // Footer decimals setting
+    const decimalsRow = document.createElement('div');
+    decimalsRow.classList.add('col');
+    const decimalsLabel = document.createElement('div');
+    decimalsLabel.classList.add('left');
+    decimalsLabel.textContent = t("tab1Render", "footer_decimals");
+    decimalsLabel.setAttribute('title', t("tab1Render", "footer_decimals_help"));
+    
+    const decimalsContainer = document.createElement('div');
+    decimalsContainer.classList.add('row');
+    const decimalsField = document.createElement('ha-textfield');
+    decimalsField.classList.add('cell');
+    decimalsField.setAttribute('id', 'footerDecimals');
+    decimalsField.setAttribute('data-path', 'param.footerDecimals');
+    decimalsField.setAttribute('label', t("tab1Render", "footer_decimals"));
+    decimalsField.setAttribute('value', appendTo._config.param?.footerDecimals ?? 0);
+    decimalsField.setAttribute('type', 'number');
+    decimalsField.setAttribute('min', 0);
+    decimalsField.setAttribute('max', 3);
+    decimalsField.setAttribute('step', 1);
+    decimalsField.setAttribute('helper-text', t("tab1Render", "footer_decimals_help"));
+    decimalsContainer.appendChild(decimalsField);
+    
+    decimalsRow.appendChild(decimalsLabel);
+    decimalsRow.appendChild(decimalsContainer);
+    editorDiv.appendChild(decimalsRow);
+    
+    // Font sizes
     const fontSizeRow = document.createElement('div');
     fontSizeRow.classList.add('col');
     const fontSizeLabel = document.createElement('div');
@@ -276,7 +310,6 @@ export function subtabRender(box, config, hass, appendTo) {
     thisAllAnchors.sort();
     
     const OtherAllAnchors = getAllAnchorsExceptCurrent(config, box);
-    //console.log(box + " : " + OtherAllAnchors);
     
     subTabContent.innerHTML = `
         
@@ -628,7 +661,6 @@ export function attachLinkInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-combo-box').forEach((comboBox) => {
         
         if (eventHandlers.has(comboBox)) {
-            //console.log("Événement déjà attaché à cet élément ha-combo-box :", comboBox);
             return; 
         }
         
@@ -661,7 +693,6 @@ export function attachLinkInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-textfield').forEach((textField) => {
         
         if (eventHandlers.has(textField)) {
-            //console.log("Événement déjà attaché à cet élément ha-textfield :", textField);
             return; 
         }
         
@@ -702,7 +733,6 @@ export function attachLinkInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-switch').forEach((toggle) => {
         
         if (eventHandlers.has(toggle)) {
-            //console.log("Événement déjà attaché à cet élément ha-switch :", toggle);
             return;
         }
         
@@ -733,7 +763,6 @@ export function attachInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-textfield:not(.anchor)').forEach((textField) => {
         
         if (eventHandlers.has(textField)) {
-            //console.log("Événement déjà attaché à cet élément ha-textfield :", textField);
             return;
         }
         
@@ -816,7 +845,6 @@ export function attachInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-switch').forEach((toggle) => {
         
         if (eventHandlers.has(toggle)) {
-            //console.log("Événement déjà attaché à cet élément ha-switch :", toggle);
             return;
         }
         
@@ -860,7 +888,6 @@ export function attachInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-radio').forEach((radio) => {
         
         if (eventHandlers.has(radio)) {
-            //console.log("Événement déjà attaché à cet élément ha-radio :", radio);
             return;
         }
         
@@ -883,7 +910,6 @@ export function attachInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-icon-picker').forEach((iconPicker) => {
         
         if (eventHandlers.has(iconPicker)) {
-            //console.log("Événement déjà attaché à cet élément ha-icon-picker :", iconPicker);
             return;
         }
         
@@ -910,7 +936,6 @@ export function attachInputs(appendTo) {
     appendTo.shadowRoot.querySelectorAll('ha-entity-picker').forEach((entityPicker) => {
         
         if (eventHandlers.has(entityPicker)) {
-            //console.log("Événement déjà attaché à cet élément ha-entity-picker :", entityPicker);
             return;
         }
     
@@ -991,8 +1016,6 @@ export function notifyConfigChange(appendTo) {
         composed: true,
     });
     
-    //console.log(appendTo._config);
-    
     event.detail = { config: appendTo._config };
     appendTo.dispatchEvent(event);
 }
@@ -1001,7 +1024,6 @@ export function notifyConfigChange(appendTo) {
 export function attachLinkClick(renderTabContent, appendTo) {
     appendTo.shadowRoot.querySelectorAll('#tab-group sl-tab').forEach((link) => {
         if (eventHandlers.has(link)) {
-            console.log("Événement déjà attaché à cet élément #link-container mwc-tab :", link);
             return;
         }
 
@@ -1021,7 +1043,6 @@ export function attachLinkClick(renderTabContent, appendTo) {
 export function attachSubLinkClick(appendTo) {
     appendTo.shadowRoot.querySelectorAll('#subTab-group sl-tab').forEach((sublink) => {
         if (eventHandlers.has(sublink)) {
-            console.log("Événement déjà attaché à cet élément #sublink-container mwc-tab :", sublink);
             return;
         }
 
@@ -1035,9 +1056,3 @@ export function attachSubLinkClick(appendTo) {
         eventHandlers.set(sublink, handleClick);
     });
 }
-    
-
-
-
-
-
