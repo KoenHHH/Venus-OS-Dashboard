@@ -1,5 +1,5 @@
 console.info(
-  "%c 🗲 %c - %cVenus OS BD%c - %c 🗲 \n%c version 0.1.18 ",
+  "%c 🗲 %c - %cVenus OS BD%c - %c 🗲 \n%c version 0.1.1",
   "color: white; font-weight: bold; background: black",
   "color: orange; font-weight: bold; background: blue; font-weight: bold;",
   "color: white; font-weight: bold; background: blue; text-decoration: underline; text-decoration-color: orange; text-decoration-thickness: 5px; text-underline-offset: 2px;",
@@ -106,7 +106,7 @@ class venusOsDashboardCard extends HTMLElement {
 
     libVenus.checkReSize(devices, venusOsDashboardCard.isDark, this.content);
 
-    libVenus.checkForReverse(devices, hass);
+    libVenus.checkForReverse(this.config, devices, hass);
 
     if (!this.periodicTaskStarted) {
       const taskStarted = libVenus.startPeriodicTask(this.config, hass);
@@ -147,5 +147,3 @@ window.customCards.push({
   preview: true,
   description: 'A dashboard that looks like Venus OS gui-v2 from Victron.',
 });
-
-
