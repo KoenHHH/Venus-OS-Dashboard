@@ -9,7 +9,11 @@ export default {
     in_header: "im Kopfbereich",
     in_devices: "in Geräten",
     in_footer: "im Fußbereich",
-    font_size: "Schriftgröße"
+    font_size: "Schriftgröße",
+    animation_threshold: "Animationsschwelle (W):",
+    animation_threshold_help: "Kugeln verschwinden, wenn die Leistung unter diesem Wert liegt",
+    footer_decimals: "Dezimalstellen im Fußbereich:",
+    footer_decimals_help: "Anzahl der Dezimalstellen für Fußbereichswerte"
   },
   subtabRender: {
     header_title: "Konfiguration Kopfbereich",
