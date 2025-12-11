@@ -11,7 +11,7 @@
 ![commits](https://img.shields.io/github/commit-activity/y/KoenHHH/Venus-OS-Dashboard?style=for-the-badge)
 ![license](https://img.shields.io/github/license/KoenHHH/Venus-OS-Dashboard?style=for-the-badge&logo=opensourceinitiative&logoColor=white&color=0080ff)
 
-![victron](https://github.com/user-attachments/assets/cf84bf5c-2b7a-4634-9634-8b4ec642473f)
+![venus](https://github.com/user-attachments/assets/55bf25d8-85a2-4ee1-a652-a2e915e4d57e)
 
 ## **What is Venus OS Dashboard ?**
 
