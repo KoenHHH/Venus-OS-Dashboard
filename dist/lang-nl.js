@@ -9,7 +9,11 @@ export default {
     in_header: "in koptekst",
     in_devices: "in apparaten",
     in_footer: "in voettekst",
-    font_size: "Lettergrootte"
+    font_size: "Lettergrootte",
+    animation_threshold: "Animatiedrempel (W):",
+    animation_threshold_help: "Ballen verdwijnen wanneer het vermogen onder deze waarde komt",
+    footer_decimals: "Decimalen in voettekst:",
+    footer_decimals_help: "Aantal decimalen voor voettekstwaarden"
   },
   subtabRender: {
     header_title: "Configuratie koptekst",
