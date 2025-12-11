@@ -9,7 +9,11 @@ export default {
     in_header: "in header",
     in_devices: "in devices",
     in_footer: "in footer",
-    font_size: "Font size"
+    font_size: "Font size",
+    animation_threshold: "Animation threshold (W):",
+    animation_threshold_help: "Balls disappear when power is below this value",
+    footer_decimals: "Footer decimal places:",
+    footer_decimals_help: "Number of decimal places for footer values"
   },
   subtabRender: {
     header_title: "Header configuration",
@@ -25,7 +29,7 @@ export default {
     entity_header: "Select header entity",
     entity_footer: "Select footer entity",
     entity2_footer: "Select 2nd footer entity",
-    entity3_footer: "Select 3th header entity",
+    entity3_footer: "Select 3rd footer entity",
     anchor_title: "Add anchor",
     left_qtyBox: "Left",
     top_qtyBox: "Top",
