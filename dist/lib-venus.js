@@ -132,18 +132,22 @@ function creatAnchors(colNbrs, boxNbrs, numAnchors, type, appendTo) {
 	}
 }
 
-function formatValue(raw) {
+function formatValue(raw, decimals = 0) {
     // Leave 'N/C', 'unavailable', 'unknown', or non-numeric strings unchanged
     if (raw === undefined || raw === null) return '';
     if (raw === 'N/C' || raw === 'unavailable' || raw === 'unknown') return raw;
 
     const n = parseFloat(raw);
-    return isNaN(n) ? raw : Math.round(n);
+    if (isNaN(n)) return raw;
+    
+    // For decimals = 0, round; otherwise use toFixed
+    return decimals === 0 ? Math.round(n) : n.toFixed(decimals);
 }
 
 export function fillBox(config, styles, isDark, hass, appendTo) {
     
     const devices = config.devices || [];
+    const footerDecimals = config.param?.footerDecimals ?? 0;
     
     for (const boxId in devices) {
         
@@ -163,8 +167,7 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
                 
         const state = hass.states[device.entity];
 		const rawValue = state ? state.state : 'N/C';
-		console.log('Raw value:', rawValue, 'Type:', typeof rawValue);
-		let value = formatValue(rawValue); // now uses the helper
+		let value = formatValue(rawValue, 0); // Main sensor always rounded
 		const unit = state && state.attributes && state.attributes.unit_of_measurement ? state.attributes.unit_of_measurement : '';
             
         let addGauge = "";
@@ -207,7 +210,7 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
                 addSensorStyle = ` style="font-size: ${dynSizeSensor}px;"`;
                     
             } else {
-                addSensorStyle = ` style="font-size: ${styles.sensor};"`;
+                addSensorStyle = ` style="font-size: ${styles.sensor}px;"`;
             }
         }
         
@@ -222,7 +225,7 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
                 addSensor2Style = ` style="font-size: ${dynSizeSensor2}px;"`;
                     
             } else {
-                addSensor2Style = ` style="font-size: ${styles.sensor2}px;"`
+                addSensor2Style = ` style="font-size: ${styles.sensor2}px;"`;
             }
         }
             
@@ -237,7 +240,7 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
                 addFooterStyle = ` style="font-size: ${dynSizeFooter}px;"`;
                     
             } else {
-                addFooterStyle = ` style="font-size: ${styles.footer};"`;
+                addFooterStyle = ` style="font-size: ${styles.footer}px;"`;
             }
         }
             
@@ -247,7 +250,7 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
 		    const unitvalueHeaderEnt = stateHeaderEnt && stateHeaderEnt.attributes && stateHeaderEnt.attributes.unit_of_measurement
 		        ? stateHeaderEnt.attributes.unit_of_measurement
 		        : '';
-		    valueHeaderEnt = formatValue(valueHeaderEnt);
+		    valueHeaderEnt = formatValue(valueHeaderEnt, 0);
 		    addHeaderEntity = `
 		        <div class="headerEntity">${valueHeaderEnt}<div class="boxUnit">${unitvalueHeaderEnt}</div></div>
 		    `;
@@ -259,7 +262,7 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
 		    const unitvalueEntity2 = stateEntity2 && stateEntity2.attributes && stateEntity2.attributes.unit_of_measurement
 		        ? stateEntity2.attributes.unit_of_measurement
 		        : '';
-		    valueEntity2 = formatValue(valueEntity2);
+		    valueEntity2 = formatValue(valueEntity2, 0);
 		    addEntity2 = `
 		        <div class="boxSensor2"${addSensor2Style}>${valueEntity2}<div class="boxUnit">${unitvalueEntity2}</div></div>
 		    `;
@@ -272,21 +275,21 @@ export function fillBox(config, styles, isDark, hass, appendTo) {
 			const unitvalueFooterEnt1 = stateFooterEnt1 && stateFooterEnt1.attributes.unit_of_measurement
 			    ? stateFooterEnt1.attributes.unit_of_measurement
 			    : '';
-			valueFooterEnt1 = formatValue(valueFooterEnt1);
+			valueFooterEnt1 = formatValue(valueFooterEnt1, footerDecimals);
 			
 			const stateFooterEnt2 = hass.states[device.footerEntity2];
 			let valueFooterEnt2 = stateFooterEnt2 ? stateFooterEnt2.state : '';
 			const unitvalueFooterEnt2 = stateFooterEnt2 && stateFooterEnt2.attributes.unit_of_measurement
 			    ? stateFooterEnt2.attributes.unit_of_measurement
 			    : '';
-			valueFooterEnt2 = formatValue(valueFooterEnt2);
+			valueFooterEnt2 = formatValue(valueFooterEnt2, footerDecimals);
 			
 			const stateFooterEnt3 = hass.states[device.footerEntity3];
 			let valueFooterEnt3 = stateFooterEnt3 ? stateFooterEnt3.state : '';
 			const unitvalueFooterEnt3 = stateFooterEnt3 && stateFooterEnt3.attributes.unit_of_measurement
 			    ? stateFooterEnt3.attributes.unit_of_measurement
 			    : '';
-			valueFooterEnt3 = formatValue(valueFooterEnt3);
+			valueFooterEnt3 = formatValue(valueFooterEnt3, footerDecimals);
 			            
             addFooter = `
                 <div class="boxFooter"${addFooterStyle}>
@@ -334,7 +337,6 @@ function creatGraph (boxId, device, isDark, appendTo) {
         return;
     }
     
-    console.log(data);
     if (!data || data.length === 0) {
         console.warn(`No data was found for the entity ${device.entity}.`);
         updateGraphTriggers.set(device.entity, false);
@@ -379,58 +381,6 @@ function generatePath(data, svgWidth = 500, svgHeight = 100) {
     }
     path += ` T${simplifiedData[simplifiedData.length - 1].x},${simplifiedData[simplifiedData.length - 1].y}`; 
     return path;
-}
-
-function simplifyPath(points, tolerance) {
-    if (points.length <= 2) return points; 
-
-    const sqTolerance = tolerance * tolerance;
-
-    function getSqSegmentDistance(p, p1, p2) {
-        let x = p1.x, y = p1.y;
-        let dx = p2.x - x, dy = p2.y - y;
-
-        if (dx !== 0 || dy !== 0) {
-            const t = ((p.x - x) * dx + (p.y - y) * dy) / (dx * dx + dy * dy);
-            if (t > 1) {
-                x = p2.x;
-                y = p2.y;
-            } else if (t > 0) {
-                x += dx * t;
-                y += dy * t;
-            }
-        }
-
-        dx = p.x - x;
-        dy = p.y - y;
-
-        return dx * dx + dy * dy;
-    }
-
-    function simplifyRecursive(start, end, sqTolerance, simplified) {
-        let maxSqDist = sqTolerance;
-        let index;
-
-        for (let i = start + 1; i < end; i++) {
-            const sqDist = getSqSegmentDistance(points[i], points[start], points[end]);
-            if (sqDist > maxSqDist) {
-                index = i;
-                maxSqDist = sqDist;
-            }
-        }
-
-        if (maxSqDist > sqTolerance) {
-            if (index - start > 1) simplifyRecursive(start, index, sqTolerance, simplified);
-            simplified.push(points[index]);
-            if (end - index > 1) simplifyRecursive(index, end, sqTolerance, simplified);
-        }
-    }
-
-    const simplified = [points[0]];
-    simplifyRecursive(0, points.length - 1, sqTolerance, simplified);
-    simplified.push(points[points.length - 1]);
-
-    return simplified;
 }
 
 export function checkReSize(devices, isDarkTheme, appendTo) {
@@ -585,137 +535,157 @@ function creatLine(anchorId1, anchorId2, direction_init, isDarkTheme, appendTo) 
     
 	const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 
-		if (!pathData.includes("NaN")) {
-		    path.setAttribute("d", pathData);
-		} else {
-		    console.warn("SVG path ignored because pathData contains NaN");
-		    return;
-		}
-		
-		path.setAttribute("fill", "none");
-		path.setAttribute("stroke-width", "2");
-		
-		pathContainer.appendChild(path);
-		
-		const pathLength = path.getTotalLength();
-		
-		// --- NEW MULTIPLE BALLS ANIMATION SETTINGS ---
-		const spacingPx = 36;  // spacing between balls (tune this)
-		const ballRadius = 4;  // ball size (tune this)
-		const ballCount = Math.max(1, Math.floor(pathLength / spacingPx));
-		
-		const circles = [];
-		for (let i = 0; i < ballCount; i++) {
-		    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-		    circle.setAttribute("class", "ball");
-		    circle.setAttribute("r", String(ballRadius));
-		    circle.setAttribute("cx", coords1.x);
-		    circle.setAttribute("cy", coords1.y);
-		
-		    if (isDarkTheme) circle.setAttribute("fill", "url(#gradientDark)");
-		    else circle.setAttribute("fill", "url(#gradientLight)");
-		
-		    circContainer.appendChild(circle);
-		    circles.push(circle);
-		}
-		
-		const controls = animateBallsAlongPath(anchorId1, path, circles, appendTo);
-		
-		pathControls.set(anchorId1, controls);
-		
-		directionControls.set(anchorId1, direction_init);
-		}
-		
-		function getAnchorCoordinates(anchorId, appendTo) {
-		    const columnIndex = anchorId[0];
-		    const boxIndex = anchorId.substring(0, 3);
-		
-		    const anchor = appendTo.querySelector(`#dashboard > #column-${columnIndex} > #box_${boxIndex} > #anchor_${anchorId}`);
-		    const container = appendTo.querySelector(`#dashboard`);
-		
-		    if (!anchor || !container) {
-		        console.error("Anchor or container not found : " + anchorId);
-		        return null;
-		    }
-		
-		    const anchorRect = anchor.getBoundingClientRect();
-		    const containerRect = container.getBoundingClientRect();
-		
-		    const relativeX = (anchorRect.left - containerRect.left + anchorRect.width / 2) * 1000 / containerRect.width;
-		    const relativeY = (anchorRect.top - containerRect.top + anchorRect.height / 2) * 600 / containerRect.height;
-		
-		    return { x: parseFloat(relativeX.toFixed(2)), y: parseFloat(relativeY.toFixed(2)) };
-		}
-		
-		// --- NEW MULTI-BALL ANIMATION FUNCTION ---
-		function animateBallsAlongPath(anchorId1, path, circles, appendTo) {
-		    let direction = directionControls.get(anchorId1) || 1;
-		
-		    const pathLength = path.getTotalLength();
-		    const box = appendTo.querySelector(`#dashboard`);
-		    const boxWidth = box ? box.offsetWidth : 1000;
-		
-		    const speedFactor = 0.05; // modify speed (lower=slower)
-		    const speed = Math.max(1, boxWidth * speedFactor);
-		    const duration = pathLength / speed * 1000;
-		
-		    let startTime = null;
-		
-		    function reverseDirection(cmd) {
-		        const directionInit = directionControls.get(anchorId1) ?? 1;
-		        direction = directionInit * cmd;
-		    }
-		
-		    function moveBalls(time) {
-		        if (!startTime) startTime = time;
-		        const elapsed = time - startTime;
-		        let baseProgress = ((elapsed % duration) / duration);
-		
-		        const n = circles.length;
-		        for (let i = 0; i < n; i++) {
-		            let p = baseProgress + (i / n);
-		            p = p - Math.floor(p);
-		            if (direction === -1) p = 1 - p;
-		
-		            const point = path.getPointAtLength(p * pathLength);
-		            const c = circles[i];
-		            c.setAttribute("cx", point.x);
-		            c.setAttribute("cy", point.y);
-		        }
-		
-		        requestAnimationFrame(moveBalls);
-		    }
-		
-		    requestAnimationFrame(moveBalls);
-		
-		    return { reverse: reverseDirection };
-		}
+	if (!pathData.includes("NaN")) {
+	    path.setAttribute("d", pathData);
+	} else {
+	    console.warn("SVG path ignored because pathData contains NaN");
+	    return;
+	}
+	
+	path.setAttribute("fill", "none");
+	path.setAttribute("stroke-width", "2");
+	
+	pathContainer.appendChild(path);
+	
+	const pathLength = path.getTotalLength();
+	
+	const spacingPx = 36;
+	const ballRadius = 4;
+	const ballCount = Math.max(1, Math.floor(pathLength / spacingPx));
+	
+	const circles = [];
+	for (let i = 0; i < ballCount; i++) {
+	    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	    circle.setAttribute("class", "ball");
+	    circle.setAttribute("r", String(ballRadius));
+	    circle.setAttribute("cx", coords1.x);
+	    circle.setAttribute("cy", coords1.y);
+	
+	    if (isDarkTheme) circle.setAttribute("fill", "url(#gradientDark)");
+	    else circle.setAttribute("fill", "url(#gradientLight)");
+	
+	    circContainer.appendChild(circle);
+	    circles.push(circle);
+	}
+	
+	const controls = animateBallsAlongPath(anchorId1, path, circles, appendTo);
+	
+	pathControls.set(anchorId1, controls);
+	
+	directionControls.set(anchorId1, direction_init);
+}
 
-export function checkForReverse(devices, hass) {
+function getAnchorCoordinates(anchorId, appendTo) {
+    const columnIndex = anchorId[0];
+    const boxIndex = anchorId.substring(0, 3);
+
+    const anchor = appendTo.querySelector(`#dashboard > #column-${columnIndex} > #box_${boxIndex} > #anchor_${anchorId}`);
+    const container = appendTo.querySelector(`#dashboard`);
+
+    if (!anchor || !container) {
+        console.error("Anchor or container not found : " + anchorId);
+        return null;
+    }
+
+    const anchorRect = anchor.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    const relativeX = (anchorRect.left - containerRect.left + anchorRect.width / 2) * 1000 / containerRect.width;
+    const relativeY = (anchorRect.top - containerRect.top + anchorRect.height / 2) * 600 / containerRect.height;
+
+    return { x: parseFloat(relativeX.toFixed(2)), y: parseFloat(relativeY.toFixed(2)) };
+}
+
+function animateBallsAlongPath(anchorId1, path, circles, appendTo) {
+    let direction = directionControls.get(anchorId1) || 1;
+    let isVisible = true;
+
+    const pathLength = path.getTotalLength();
+    const box = appendTo.querySelector(`#dashboard`);
+    const boxWidth = box ? box.offsetWidth : 1000;
+
+    const speedFactor = 0.05;
+    const speed = Math.max(1, boxWidth * speedFactor);
+    const duration = pathLength / speed * 1000;
+
+    let startTime = null;
+
+    function reverseDirection(cmd) {
+        const directionInit = directionControls.get(anchorId1) ?? 1;
+        direction = directionInit * cmd;
+    }
+    
+    function setVisibility(visible) {
+        isVisible = visible;
+        circles.forEach(c => {
+            c.style.opacity = visible ? '1' : '0';
+        });
+    }
+
+    function moveBalls(time) {
+        if (!startTime) startTime = time;
+        const elapsed = time - startTime;
+        let baseProgress = ((elapsed % duration) / duration);
+
+        const n = circles.length;
+        for (let i = 0; i < n; i++) {
+            let p = baseProgress + (i / n);
+            p = p - Math.floor(p);
+            if (direction === -1) p = 1 - p;
+
+            const point = path.getPointAtLength(p * pathLength);
+            const c = circles[i];
+            c.setAttribute("cx", point.x);
+            c.setAttribute("cy", point.y);
+        }
+
+        requestAnimationFrame(moveBalls);
+    }
+
+    requestAnimationFrame(moveBalls);
+
+    return { reverse: reverseDirection, setVisibility: setVisibility };
+}
+
+export function checkForReverse(config, devices, hass) {
+    
+    const animationThreshold = config.param?.animationThreshold ?? 5;
     
     for (const boxId in devices) {
-            const device = devices[boxId];
-            
-            const links = device.link;
-            
-            if(links !== "nolink") {
-                for (const linkId in links) {
+        const device = devices[boxId];
+        
+        const links = device.link;
+        
+        if(links !== "nolink") {
+            for (const linkId in links) {
+                
+                const link = links[linkId];
+                
+                const stateLinkEnt = hass.states[link.entity];
+                const valueLinkEnt = stateLinkEnt ? parseFloat(stateLinkEnt.state) : 0;
+                
+                const pathControl = pathControls.get(`${boxId}_${link.start}`);
+                
+                if (pathControl && typeof pathControl.reverse === "function") {
+                    const absValue = Math.abs(valueLinkEnt);
                     
-                    const link = links[linkId];
+                    // Control visibility based on threshold
+                    if (pathControl.setVisibility) {
+                        pathControl.setVisibility(absValue >= animationThreshold);
+                    }
                     
-                    const stateLinkEnt = hass.states[link.entity];
-                    const valueLinkEnt = stateLinkEnt ? stateLinkEnt.state : '';
-                    
-                    const pathControl = pathControls.get(`${boxId}_${link.start}`);
-                    
-                    if (pathControl && typeof pathControl.reverse === "function") {
-                        if(valueLinkEnt < -0.5) pathControls.get(`${boxId}_${link.start}`).reverse(-1); 
-                        else if(valueLinkEnt > 0.5) pathControls.get(`${boxId}_${link.start}`).reverse(1); 
-                        else pathControls.get(`${boxId}_${link.start}`).reverse(0); 
-                    } 
-                }
-        	}
-        }
+                    // Control direction
+                    if(valueLinkEnt < -animationThreshold) {
+                        pathControl.reverse(-1); 
+                    } else if(valueLinkEnt > animationThreshold) {
+                        pathControl.reverse(1); 
+                    } else {
+                        pathControl.reverse(0); 
+                    }
+                } 
+            }
+    	}
+    }
 }
 
 
@@ -733,8 +703,6 @@ export async function startPeriodicTask(config, hass) {
             
             const intervalMinutes = 15;
             
-            //console.log(`Attempting to start the periodic task for ${device.entity}. Interval: ${intervalMinutes} minutes.`);
-            
             const firstExecutionSuccessful = await performTask(device.entity, hass);
             
             if (!firstExecutionSuccessful) {
@@ -742,8 +710,6 @@ export async function startPeriodicTask(config, hass) {
                 clearAllIntervals();
                 return false;
             }
-            
-            //console.log(`First successful execution for ${device.entity}. Implementation of the periodic task`);
 
             const intervalId = setInterval(() => {
                 performTask(device.entity, hass);
@@ -758,13 +724,11 @@ export async function startPeriodicTask(config, hass) {
 export function clearAllIntervals(appendTo) {
     intervals.forEach((intervalId, id) => {
         clearInterval(intervalId);
-        //console.log(`Task for the entity "${id}" stopped.`);
     });
     intervals.clear();
 }
 
 function performTask(entityId, hass) {
-    //console.log(`Periodic task in progress for the entity "${entityId}"...`);
     
     const historicalData = fetchHistoricalData(entityId, 24, hass);
     
@@ -773,7 +737,6 @@ function performTask(entityId, hass) {
         return false; 
     }
 
-    //console.log(`Successful periodic task for ${entityId}.`);
     return true; 
 }
 
@@ -792,7 +755,7 @@ async function fetchHistoricalData(entityId, periodInHours = 24, hass, numSegmen
         const response = await hass.callApi('GET', url);
 
         if (response.length === 0 || response[0].length === 0) {
-            console.log(`No data available for "${entityId}" in the period off ${periodInHours} hour(s).`);
+            console.log(`No data available for "${entityId}" in the period of ${periodInHours} hour(s).`);
             return false;
         }
 
@@ -811,18 +774,17 @@ async function fetchHistoricalData(entityId, periodInHours = 24, hass, numSegmen
         }
 
         const interval = 30 * 60 * 1000; 
-                const totalIntervals = (periodInHours * 60 * 60 * 1000) / interval;
-                const startTimestamp = Math.floor(startTime.getTime() / interval) * interval;
-            
-                const reducedData = [];
-                for (let i = 0; i < totalIntervals; i++) {
-                    const targetTime = new Date(startTimestamp + i * interval);
-                    const closest = formattedData.reduce((prev, curr) => {
-                        return Math.abs(curr.time - targetTime) < Math.abs(prev.time - targetTime) ? curr : prev;
-                    });
-                    reducedData.push({ time: targetTime, value: closest.state });
-                }
-
+        const totalIntervals = (periodInHours * 60 * 60 * 1000) / interval;
+        const startTimestamp = Math.floor(startTime.getTime() / interval) * interval;
+    
+        const reducedData = [];
+        for (let i = 0; i < totalIntervals; i++) {
+            const targetTime = new Date(startTimestamp + i * interval);
+            const closest = formattedData.reduce((prev, curr) => {
+                return Math.abs(curr.time - targetTime) < Math.abs(prev.time - targetTime) ? curr : prev;
+            });
+            reducedData.push({ time: targetTime, value: closest.state });
+        }
 		
         const segmentSize = Math.ceil(formattedData.length / numSegments);
         for (let i = 0; i < formattedData.length; i += segmentSize) {
@@ -835,15 +797,12 @@ async function fetchHistoricalData(entityId, periodInHours = 24, hass, numSegmen
                 if (point.state < minPoint.value) minPoint = { value: point.state, time: point.time };
                 if (point.state > maxPoint.value) maxPoint = { value: point.state, time: point.time };
             });
-        
 
             reducedData.push({ time: minPoint.time, value: minPoint.value });
             reducedData.push({ time: maxPoint.time, value: maxPoint.value });
         }
 
         reducedData.sort((a, b) => a.time - b.time);
-        
-        //console.log(reducedData);
 
         historicData.set(
             entityId,
@@ -913,6 +872,8 @@ export function getDefaultConfig(hass) {
         param: {
             boxCol1: 2,
             boxCol3: 2,
+            animationThreshold: 5,
+            footerDecimals: 0,
         },
         theme: "dark",
         styles: {
@@ -980,14 +941,3 @@ export function getDefaultConfig(hass) {
         },
     }
 }
-
-
-
-
-
-
-
-
-
-
-
