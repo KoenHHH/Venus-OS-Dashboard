@@ -4,7 +4,7 @@ export const eventHandlers = new WeakMap();
 
 let translations = {}; 
 
-const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'nl'];
+const SUPPORTED_LANGUAGES = ['en', 'de', 'fr', 'nl', 'es', 'pt', 'it'];
 const DEFAULT_LANGUAGE = 'en';
 
 export async function loadTranslations(appendTo) {
