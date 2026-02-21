@@ -13,7 +13,13 @@ export default {
     animation_threshold: "Animationsschwelle (W):",
     animation_threshold_help: "Kugeln verschwinden, wenn die Leistung unter diesem Wert liegt",
     footer_decimals: "Dezimalstellen im Fußbereich:",
-    footer_decimals_help: "Anzahl der Dezimalstellen für Fußbereichswerte"
+    footer_decimals_help: "Anzahl der Dezimalstellen für Fußbereichswerte",
+    colors: "Farben:",
+    color_box_bg: "Box-Hintergrund",
+    color_dashboard_bg: "Dashboard-Hintergrund",
+    color_box_shadow: "Box-Schatten / Rahmen",
+    color_anchor: "Anker / Verbinder",
+    color_line: "Verbindungslinie"
   },
   subtabRender: {
     header_title: "Konfiguration Kopfbereich",
