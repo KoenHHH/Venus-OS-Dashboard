@@ -13,7 +13,13 @@ export default {
     animation_threshold: "Animatiedrempel (W):",
     animation_threshold_help: "Ballen verdwijnen wanneer het vermogen onder deze waarde komt",
     footer_decimals: "Decimalen in voettekst:",
-    footer_decimals_help: "Aantal decimalen voor voettekstwaarden"
+    footer_decimals_help: "Aantal decimalen voor voettekstwaarden",
+    colors: "Kleuren:",
+    color_box_bg: "Achtergrond box",
+    color_dashboard_bg: "Achtergrond dashboard",
+    color_box_shadow: "Schaduw / rand box",
+    color_anchor: "Anker / verbinder",
+    color_line: "Stroombaan"
   },
   subtabRender: {
     header_title: "Configuratie koptekst",
