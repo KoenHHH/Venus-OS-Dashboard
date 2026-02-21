@@ -1,11 +1,17 @@
-export function cssDataDark(user) {
+export function cssDataDark(colors = {}) {
+    const boxBg       = colors.boxBg       || '#1f2a3c';
+    const boxShadow   = colors.boxShadow   || '#38619b';
+    const anchor      = colors.anchor      || '#38619b';
+    const line        = colors.line        || '#4369a2';
+    const dashboardBg = colors.dashboardBg || '#111111';
+
     var css =`
     
         ha-card {
-            --box-background-color: #1f2a3c;  	
-            --box-shadow-color: #38619b;      
-            --anchor-color: #38619b;           
-	    	--line-color: #4369a2; 				
+            --box-background-color: ${boxBg};
+            --box-shadow-color:     ${boxShadow};
+            --anchor-color:         ${anchor};
+            --line-color:           ${line};
         }
         
         .db-container {
@@ -24,7 +30,7 @@ export function cssDataDark(user) {
             border-radius: 10px;
             position: absolute;
             box-sizing: border-box;
-            background-color: #111111;
+            background-color: ${dashboardBg};
             gap: 8%;
         }
 
@@ -249,6 +255,3 @@ export function cssDataDark(user) {
     return css;
 
 }
-  
-
-
