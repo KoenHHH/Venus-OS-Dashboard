@@ -1,0 +1,53 @@
+export default {
+  tab1Render: {
+    theme_choice: "Seleziona tema della scheda:",
+    light: "Chiaro",
+    dark: "Scuro",
+    auto: "Automatico",
+    devices_per_column: "Numero di \"Dispositivi\" per colonna:",
+    font_size_zones: "Dimensione carattere nelle zone \"Dispositivi\":",
+    in_header: "nell'intestazione",
+    in_devices: "nei dispositivi",
+    in_footer: "nel piè di pagina",
+    font_size: "Dimensione carattere",
+    animation_threshold: "Soglia di animazione (W):",
+    animation_threshold_help: "Le palline scompaiono quando la potenza è al di sotto di questo valore",
+    footer_decimals: "Decimali del piè di pagina:",
+    footer_decimals_help: "Numero di decimali per i valori del piè di pagina",
+    colors: "Colori:",
+    color_box_bg: "Sfondo della casella",
+    color_dashboard_bg: "Sfondo del pannello",
+    color_box_shadow: "Ombra / bordo della casella",
+    color_anchor: "Ancora / connettore",
+    color_line: "Linea di flusso"
+  },
+  subtabRender: {
+    header_title: "Configurazione intestazione",
+    icon_choice: "Scegli icona",
+    name_choice: "Nome del dispositivo",
+    sensor_title: "Configurazione sensore principale",
+    entity_choice: "Scegli entità",
+    entity2_choice: "Scegli entità secondaria",
+    enable_graph: "Abilita grafico",
+    enable_gauge: "Abilita indicatore in %",
+    warning_gauge: "Può essere abilitato solo se l'unità di misura è %",
+    header_footer_title: "Configurazione sensori intestazione e piè di pagina",
+    entity_header: "Seleziona entità intestazione",
+    entity_footer: "Seleziona entità piè di pagina",
+    entity2_footer: "Seleziona 2ª entità piè di pagina",
+    entity3_footer: "Seleziona 3ª entità piè di pagina",
+    anchor_title: "Aggiungi ancora",
+    left_qtyBox: "Sinistra",
+    top_qtyBox: "Su",
+    bottom_qtyBox: "Giù",
+    right_qtyBox: "Destra",
+    add_links: "Aggiungi collegamenti",
+    add_link: "Aggiungi collegamento"
+  },
+  addLink: {
+    start: "Inizio",
+    end: "Fine",
+    entity_picker: "Seleziona entità",
+    reverse: "invertire"
+  }
+};
