@@ -237,6 +237,46 @@ export function tab1Render(appendTo) {
     
     editorDiv.appendChild(fontSizeRow);
     
+
+    // Colors section
+    const colorsRow = document.createElement('div');
+    colorsRow.classList.add('col');
+    const colorsLabel = document.createElement('div');
+    colorsLabel.classList.add('left');
+    colorsLabel.textContent = t("tab1Render", "colors");
+    colorsRow.appendChild(colorsLabel);
+
+    const colorFields = [
+      { id: 'colorBoxBg',      path: 'colors.boxBg',      label: t("tab1Render", "color_box_bg") },
+      { id: 'colorDashboardBg',path: 'colors.dashboardBg',label: t("tab1Render", "color_dashboard_bg") },
+      { id: 'colorBoxShadow',  path: 'colors.boxShadow',  label: t("tab1Render", "color_box_shadow") },
+      { id: 'colorAnchor',     path: 'colors.anchor',     label: t("tab1Render", "color_anchor") },
+      { id: 'colorLine',       path: 'colors.line',       label: t("tab1Render", "color_line") },
+    ];
+
+    // Render two per row
+    for (let i = 0; i < colorFields.length; i += 2) {
+      const rowDiv = document.createElement('div');
+      rowDiv.classList.add('row');
+      [colorFields[i], colorFields[i + 1]].forEach(field => {
+        if (!field) return;
+        const tf = document.createElement('ha-textfield');
+        tf.classList.add('cell');
+        tf.setAttribute('id', field.id);
+        tf.setAttribute('data-path', field.path);
+        tf.setAttribute('label', field.label);
+        tf.setAttribute('type', 'text');
+        tf.setAttribute('placeholder', '#rrggbb');
+        const pathParts = field.path.split('.');
+        const val = appendTo._config?.colors?.[pathParts[1]];
+        if (val) tf.setAttribute('value', val);
+        rowDiv.appendChild(tf);
+      });
+      colorsRow.appendChild(rowDiv);
+    }
+
+    editorDiv.appendChild(colorsRow);
+    
     tabContent.appendChild(editorDiv);
 
 }
