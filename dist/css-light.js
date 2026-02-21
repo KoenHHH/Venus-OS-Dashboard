@@ -1,11 +1,17 @@
-export function cssDataLight(user) {
+export function cssDataLight(colors = {}) {
+    const boxBg       = colors.boxBg       || '#ffffff';
+    const boxShadow   = colors.boxShadow   || '#38619b';
+    const anchor      = colors.anchor      || '#38619b';
+    const line        = colors.line        || '#4369a2';
+    const dashboardBg = colors.dashboardBg || '#fafafa';
+
     var css =`
     
         ha-card {
-            --box-background-color: #ffffff;  	
-            --box-shadow-color: #38619b;     
-            --anchor-color: #38619b;           
-	    	--line-color: #4369a2; 				
+            --box-background-color: ${boxBg};
+            --box-shadow-color:     ${boxShadow};
+            --anchor-color:         ${anchor};
+            --line-color:           ${line};
         }
         
         .db-container {
@@ -23,7 +29,7 @@ export function cssDataLight(user) {
             border-radius: 10px;
             position: absolute;
             box-sizing: border-box;
-            background-color: #fafafa;
+            background-color: ${dashboardBg};
             gap: 8%;
         }
 
@@ -249,6 +255,3 @@ export function cssDataLight(user) {
     return css;
 
 }
-  
-
-
