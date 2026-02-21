@@ -11,8 +11,8 @@ console.info(
 import './editor.js';
 import * as libVenus from './lib-venus.js';
 
-import { cssDataDark } from './css-dark.js?v=0.1';
-import { cssDataLight } from './css-light.js?v=0.1';
+import { cssDataDark } from './css-dark.js?v=0.2';
+import { cssDataLight } from './css-light.js?v=0.2';
 
 class venusOsDashboardCard extends HTMLElement {
 
@@ -87,10 +87,10 @@ class venusOsDashboardCard extends HTMLElement {
       }
 
       if ((isDarkTheme && this.config.theme === 'auto') || this.config.theme === 'dark') {
-        style.textContent = cssDataDark();
+        style.textContent = cssDataDark(this.config.colors || {});
         venusOsDashboardCard.isDark = true;
       } else {
-        style.textContent = cssDataLight();
+        style.textContent = cssDataLight(this.config.colors || {});
         venusOsDashboardCard.isDark = false;
       }
     }
