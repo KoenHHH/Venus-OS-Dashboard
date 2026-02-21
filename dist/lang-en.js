@@ -13,7 +13,13 @@ export default {
     animation_threshold: "Animation threshold (W):",
     animation_threshold_help: "Balls disappear when power is below this value",
     footer_decimals: "Footer decimal places:",
-    footer_decimals_help: "Number of decimal places for footer values"
+    footer_decimals_help: "Number of decimal places for footer values",
+    colors: "Colors:",
+    color_box_bg: "Box background",
+    color_dashboard_bg: "Dashboard background",
+    color_box_shadow: "Box shadow / border",
+    color_anchor: "Anchor / connector",
+    color_line: "Flow line"
   },
   subtabRender: {
     header_title: "Header configuration",
