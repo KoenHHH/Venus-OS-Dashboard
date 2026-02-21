@@ -1,0 +1,53 @@
+export default {
+  tab1Render: {
+    theme_choice: "Seleccionar tema de tarjeta:",
+    light: "Claro",
+    dark: "Oscuro",
+    auto: "Automático",
+    devices_per_column: "Número de \"Dispositivos\" por columna:",
+    font_size_zones: "Tamaño de fuente en zonas de \"Dispositivos\":",
+    in_header: "en encabezado",
+    in_devices: "en dispositivos",
+    in_footer: "en pie de página",
+    font_size: "Tamaño de fuente",
+    animation_threshold: "Umbral de animación (W):",
+    animation_threshold_help: "Las bolas desaparecen cuando la potencia está por debajo de este valor",
+    footer_decimals: "Decimales del pie de página:",
+    footer_decimals_help: "Número de decimales para los valores del pie de página",
+    colors: "Colores:",
+    color_box_bg: "Fondo de caja",
+    color_dashboard_bg: "Fondo del panel",
+    color_box_shadow: "Sombra / borde de caja",
+    color_anchor: "Ancla / conector",
+    color_line: "Línea de flujo"
+  },
+  subtabRender: {
+    header_title: "Configuración del encabezado",
+    icon_choice: "Elegir icono",
+    name_choice: "Nombre del dispositivo",
+    sensor_title: "Configuración del sensor principal",
+    entity_choice: "Elegir entidad",
+    entity2_choice: "Elegir entidad secundaria",
+    enable_graph: "Activar gráfico",
+    enable_gauge: "Activar indicador en %",
+    warning_gauge: "Solo se puede activar si la unidad de medida es %",
+    header_footer_title: "Configuración de sensores de encabezado y pie de página",
+    entity_header: "Seleccionar entidad de encabezado",
+    entity_footer: "Seleccionar entidad de pie de página",
+    entity2_footer: "Seleccionar 2ª entidad de pie de página",
+    entity3_footer: "Seleccionar 3ª entidad de pie de página",
+    anchor_title: "Añadir ancla",
+    left_qtyBox: "Izquierda",
+    top_qtyBox: "Arriba",
+    bottom_qtyBox: "Abajo",
+    right_qtyBox: "Derecha",
+    add_links: "Añadir enlaces",
+    add_link: "Añadir enlace"
+  },
+  addLink: {
+    start: "Inicio",
+    end: "Fin",
+    entity_picker: "Seleccionar entidad",
+    reverse: "invertir"
+  }
+};
