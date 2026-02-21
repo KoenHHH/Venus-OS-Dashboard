@@ -13,7 +13,13 @@ export default {
     animation_threshold: "Seuil d'animation (W) :",
     animation_threshold_help: "Les balles disparaissent lorsque la puissance est inférieure à cette valeur",
     footer_decimals: "Décimales du pied de page :",
-    footer_decimals_help: "Nombre de décimales pour les valeurs du pied de page"
+    footer_decimals_help: "Nombre de décimales pour les valeurs du pied de page",
+    colors: "Couleurs :",
+    color_box_bg: "Fond des boîtes",
+    color_dashboard_bg: "Fond du tableau de bord",
+    color_box_shadow: "Ombre / bordure des boîtes",
+    color_anchor: "Ancre / connecteur",
+    color_line: "Ligne de flux"
   },
   subtabRender: {
     header_title: "Configuration de l'entête",
