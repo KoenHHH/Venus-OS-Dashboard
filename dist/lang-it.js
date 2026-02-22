@@ -19,7 +19,13 @@ export default {
     color_dashboard_bg: "Sfondo del pannello",
     color_box_shadow: "Ombra / bordo della casella",
     color_anchor: "Ancora / connettore",
-    color_line: "Linea di flusso"
+    color_line: "Linea di flusso",
+    color_box_bg_help: "Colore di sfondo di ogni casella dispositivo",
+    color_dashboard_bg_help: "Colore di sfondo dell'intera scheda",
+    color_box_shadow_help: "Alone e ombra del bordo attorno a ogni casella",
+    color_anchor_help: "Colore dei punti di ancoraggio",
+    color_line_help: "Colore delle linee di flusso energetico",
+    colors_reset: "Ripristina predefiniti"
   },
   subtabRender: {
     header_title: "Configurazione intestazione",
