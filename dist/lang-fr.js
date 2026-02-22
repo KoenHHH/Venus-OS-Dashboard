@@ -19,7 +19,13 @@ export default {
     color_dashboard_bg: "Fond du tableau de bord",
     color_box_shadow: "Ombre / bordure des boîtes",
     color_anchor: "Ancre / connecteur",
-    color_line: "Ligne de flux"
+    color_line: "Ligne de flux",
+    color_box_bg_help: "Couleur de fond de chaque boîte",
+    color_dashboard_bg_help: "Couleur de fond de toute la carte",
+    color_box_shadow_help: "Lueur de bordure et ombre autour des boîtes",
+    color_anchor_help: "Couleur des points d'ancrage",
+    color_line_help: "Couleur des lignes de flux d'énergie",
+    colors_reset: "Réinitialiser"
   },
   subtabRender: {
     header_title: "Configuration de l'entête",
