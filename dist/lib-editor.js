@@ -51,7 +51,7 @@ export function tab1Render(appendTo) {
     const versionBar = document.createElement('div');
     versionBar.classList.add('row', 'right');
     versionBar.style.cssText = 'font-size:0.75em; opacity:0.5; padding-bottom:4px;';
-    versionBar.textContent = 'Venus OS Dashboard v0.1.2';
+    versionBar.textContent = 'Venus OS Dashboard v0.1.1';
     tabContent.appendChild(versionBar);
 
     const editorDiv = document.createElement('div');
@@ -278,8 +278,9 @@ export function tab1Render(appendTo) {
         tf.setAttribute('data-path', field.path);
         tf.setAttribute('label', field.label);
         tf.setAttribute('type', 'text');
-        tf.setAttribute('placeholder', isDark ? field.placeholderDark : field.placeholderLight);
+        tf.setAttribute('placeholder', isDark ? field.placeholderDark : field.placeholderLight);  // also accepts rgba(), hsl()
         tf.setAttribute('helper-text', field.helper);
+        tf.setAttribute('helper-persistent', '');
         const pathParts = field.path.split('.');
         const val = appendTo._config?.colors?.[pathParts[1]];
         if (val) tf.setAttribute('value', val);
@@ -854,15 +855,16 @@ export function attachInputs(appendTo) {
                 if (value === "") {
                     value = null;
                 } else if (textField.dataset.path && textField.dataset.path.startsWith('colors.')) {
-                    // Normalize color input: add leading # if missing, lowercase
-                    value = value.replace(/^#+/, '');  // strip any existing #
-                    if (value.length > 0) {
-                        value = '#' + value.toLowerCase();
-                        // Update the field display to show normalized value
-                        textField.value = value;
+                    // Normalize color input:
+                    // - rgba(...), hsl(...), hsla(...), named colors → pass through as-is (lowercase)
+                    // - bare hex without # (e.g. 1f2a3c or #1f2a3c or ##1f2a3c) → normalise to #rrggbb
+                    const isHexOnly = /^#+[0-9a-fA-F]{3,8}$/.test(value) || /^[0-9a-fA-F]{3,8}$/.test(value);
+                    if (isHexOnly) {
+                        value = '#' + value.replace(/^#+/, '').toLowerCase();
                     } else {
-                        value = null;
+                        value = value.toLowerCase();
                     }
+                    textField.value = value;
                 }
             }
         
@@ -1139,4 +1141,3 @@ export function attachSubLinkClick(appendTo) {
         eventHandlers.set(sublink, handleClick);
     });
 }
-
