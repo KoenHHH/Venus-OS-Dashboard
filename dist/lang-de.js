@@ -19,7 +19,13 @@ export default {
     color_dashboard_bg: "Dashboard-Hintergrund",
     color_box_shadow: "Box-Schatten / Rahmen",
     color_anchor: "Anker / Verbinder",
-    color_line: "Verbindungslinie"
+    color_line: "Verbindungslinie",
+    color_box_bg_help: "Hintergrundfarbe jeder Gerätebox",
+    color_dashboard_bg_help: "Hintergrundfarbe der gesamten Karte",
+    color_box_shadow_help: "Rahmenleuchten und Schatten um jede Box",
+    color_anchor_help: "Farbe der Ankerpunkte",
+    color_line_help: "Farbe der Energieflusslinien",
+    colors_reset: "Auf Standard zurücksetzen"
   },
   subtabRender: {
     header_title: "Konfiguration Kopfbereich",
