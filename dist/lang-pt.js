@@ -19,7 +19,13 @@ export default {
     color_dashboard_bg: "Fundo do painel",
     color_box_shadow: "Sombra / borda da caixa",
     color_anchor: "Âncora / conector",
-    color_line: "Linha de fluxo"
+    color_line: "Linha de fluxo",
+    color_box_bg_help: "Cor de fundo de cada caixa de dispositivo",
+    color_dashboard_bg_help: "Cor de fundo de todo o cartão",
+    color_box_shadow_help: "Brilho de borda e sombra em torno de cada caixa",
+    color_anchor_help: "Cor dos pontos de ancoragem",
+    color_line_help: "Cor das linhas de fluxo de energia",
+    colors_reset: "Repor predefinições"
   },
   subtabRender: {
     header_title: "Configuração do cabeçalho",
