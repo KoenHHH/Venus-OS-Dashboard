@@ -47,6 +47,13 @@ export function tab1Render(appendTo) {
     const tabContent = appendTo.shadowRoot.querySelector('#tab-content');
     tabContent.innerHTML = '';
     
+    // Version display
+    const versionBar = document.createElement('div');
+    versionBar.classList.add('row', 'right');
+    versionBar.style.cssText = 'font-size:0.75em; opacity:0.5; padding-bottom:4px;';
+    versionBar.textContent = 'Venus OS Dashboard v0.1.1';
+    tabContent.appendChild(versionBar);
+
     const editorDiv = document.createElement('div');
     editorDiv.classList.add('editor');
     
@@ -239,19 +246,24 @@ export function tab1Render(appendTo) {
     
 
     // Colors section
-    const colorsRow = document.createElement('div');
-    colorsRow.classList.add('col');
-    const colorsLabel = document.createElement('div');
-    colorsLabel.classList.add('left');
-    colorsLabel.textContent = t("tab1Render", "colors");
-    colorsRow.appendChild(colorsLabel);
+    const colorsMenu = document.createElement('div');
+    colorsMenu.classList.add('contMenu', 'col');
 
+    const colorsMenuHeader = document.createElement('div');
+    colorsMenuHeader.classList.add('row', 'headerMenu');
+    colorsMenuHeader.textContent = t("tab1Render", "colors");
+    colorsMenu.appendChild(colorsMenuHeader);
+
+    const colorsRow = document.createElement('div');
+    colorsRow.classList.add('col', 'inner');
+
+    const isDark = (appendTo._config.theme === 'dark') || (appendTo._config.theme === 'auto');
     const colorFields = [
-      { id: 'colorBoxBg',      path: 'colors.boxBg',      label: t("tab1Render", "color_box_bg") },
-      { id: 'colorDashboardBg',path: 'colors.dashboardBg',label: t("tab1Render", "color_dashboard_bg") },
-      { id: 'colorBoxShadow',  path: 'colors.boxShadow',  label: t("tab1Render", "color_box_shadow") },
-      { id: 'colorAnchor',     path: 'colors.anchor',     label: t("tab1Render", "color_anchor") },
-      { id: 'colorLine',       path: 'colors.line',       label: t("tab1Render", "color_line") },
+      { id: 'colorBoxBg',       path: 'colors.boxBg',       label: t("tab1Render", "color_box_bg"),       placeholderDark: '#1f2a3c', placeholderLight: '#ffffff', helper: t("tab1Render", "color_box_bg_help") },
+      { id: 'colorDashboardBg', path: 'colors.dashboardBg', label: t("tab1Render", "color_dashboard_bg"), placeholderDark: '#111111', placeholderLight: '#fafafa', helper: t("tab1Render", "color_dashboard_bg_help") },
+      { id: 'colorBoxShadow',   path: 'colors.boxShadow',   label: t("tab1Render", "color_box_shadow"),   placeholderDark: '#38619b', placeholderLight: '#38619b', helper: t("tab1Render", "color_box_shadow_help") },
+      { id: 'colorAnchor',      path: 'colors.anchor',      label: t("tab1Render", "color_anchor"),       placeholderDark: '#38619b', placeholderLight: '#38619b', helper: t("tab1Render", "color_anchor_help") },
+      { id: 'colorLine',        path: 'colors.line',        label: t("tab1Render", "color_line"),         placeholderDark: '#4369a2', placeholderLight: '#4369a2', helper: t("tab1Render", "color_line_help") },
     ];
 
     // Render two per row
@@ -266,7 +278,8 @@ export function tab1Render(appendTo) {
         tf.setAttribute('data-path', field.path);
         tf.setAttribute('label', field.label);
         tf.setAttribute('type', 'text');
-        tf.setAttribute('placeholder', '#rrggbb');
+        tf.setAttribute('placeholder', isDark ? field.placeholderDark : field.placeholderLight);
+        tf.setAttribute('helper-text', field.helper);
         const pathParts = field.path.split('.');
         const val = appendTo._config?.colors?.[pathParts[1]];
         if (val) tf.setAttribute('value', val);
@@ -275,7 +288,27 @@ export function tab1Render(appendTo) {
       colorsRow.appendChild(rowDiv);
     }
 
-    editorDiv.appendChild(colorsRow);
+    colorsMenu.appendChild(colorsRow);
+
+    // Reset button
+    const resetRow = document.createElement('div');
+    resetRow.classList.add('row', 'right', 'inner');
+    const resetBtn = document.createElement('mwc-button');
+    resetBtn.textContent = t("tab1Render", "colors_reset");
+    resetBtn.setAttribute('dense', '');
+    resetBtn.style.cssText = '--mdc-theme-primary: var(--primary-color);';
+    resetBtn.addEventListener('click', () => {
+        const colorKeys = ['boxBg', 'dashboardBg', 'boxShadow', 'anchor', 'line'];
+        colorKeys.forEach(k => {
+            appendTo._config = updateConfigRecursively(appendTo._config, 'colors.' + k, null, true);
+        });
+        notifyConfigChange(appendTo);
+        appendTo.renderTabContent();
+    });
+    resetRow.appendChild(resetBtn);
+    colorsMenu.appendChild(resetRow);
+
+    editorDiv.appendChild(colorsMenu);
     
     tabContent.appendChild(editorDiv);
 
@@ -820,6 +853,16 @@ export function attachInputs(appendTo) {
                 value = value.trim();
                 if (value === "") {
                     value = null;
+                } else if (textField.dataset.path && textField.dataset.path.startsWith('colors.')) {
+                    // Normalize color input: add leading # if missing, lowercase
+                    value = value.replace(/^#+/, '');  // strip any existing #
+                    if (value.length > 0) {
+                        value = '#' + value.toLowerCase();
+                        // Update the field display to show normalized value
+                        textField.value = value;
+                    } else {
+                        value = null;
+                    }
                 }
             }
         
