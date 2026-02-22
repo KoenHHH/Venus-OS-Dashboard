@@ -19,7 +19,13 @@ export default {
     color_dashboard_bg: "Dashboard background",
     color_box_shadow: "Box shadow / border",
     color_anchor: "Anchor / connector",
-    color_line: "Flow line"
+    color_line: "Flow line",
+    color_box_bg_help: "Background color of each device box",
+    color_dashboard_bg_help: "Background color of the whole card",
+    color_box_shadow_help: "Border glow and shadow around each box",
+    color_anchor_help: "Color of the anchor connector dots",
+    color_line_help: "Color of the power flow lines",
+    colors_reset: "Reset to defaults"
   },
   subtabRender: {
     header_title: "Header configuration",
