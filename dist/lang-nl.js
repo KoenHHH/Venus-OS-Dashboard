@@ -19,7 +19,13 @@ export default {
     color_dashboard_bg: "Achtergrond dashboard",
     color_box_shadow: "Schaduw / rand box",
     color_anchor: "Anker / verbinder",
-    color_line: "Stroombaan"
+    color_line: "Stroombaan",
+    color_box_bg_help: "Achtergrondkleur van elke apparaatbox",
+    color_dashboard_bg_help: "Achtergrondkleur van de volledige kaart",
+    color_box_shadow_help: "Randgloed en schaduw rondom elke box",
+    color_anchor_help: "Kleur van de ankerpunten",
+    color_line_help: "Kleur van de stroomlijnen",
+    colors_reset: "Standaard herstellen"
   },
   subtabRender: {
     header_title: "Configuratie koptekst",
