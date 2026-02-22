@@ -51,7 +51,7 @@ export function tab1Render(appendTo) {
     const versionBar = document.createElement('div');
     versionBar.classList.add('row', 'right');
     versionBar.style.cssText = 'font-size:0.75em; opacity:0.5; padding-bottom:4px;';
-    versionBar.textContent = 'Venus OS Dashboard v0.1.1';
+    versionBar.textContent = 'Venus OS Dashboard v0.1.2';
     tabContent.appendChild(versionBar);
 
     const editorDiv = document.createElement('div');
@@ -1139,3 +1139,4 @@ export function attachSubLinkClick(appendTo) {
         eventHandlers.set(sublink, handleClick);
     });
 }
+
