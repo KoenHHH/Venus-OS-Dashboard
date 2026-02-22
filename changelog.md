@@ -3,6 +3,84 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+---
+
+## 🎨 v1.0.2 — 2026-02-22
+**User-Customisable Colors, Editor Polish & Extended Language Support**
+
+### ✨ New Features
+
+#### Configurable Card Colors 🎨
+- All key card colors are now fully configurable via the GUI editor
+- New **Colors** section added to the Conf. tab with fields for:
+  - `boxBg` — device box background color
+  - `dashboardBg` — overall card background color
+  - `boxShadow` — box border glow / shadow color
+  - `anchor` — anchor connector dot color
+  - `line` — power flow line color
+- Colors stored in config under `colors.*` and applied at render time
+- Both dark and light themes independently support custom colors
+- Theme defaults are preserved as fallbacks when no custom color is set
+
+#### Reset to Defaults Button 🔄
+- One-click **Reset to defaults** button clears all custom colors and restores theme defaults
+- Available directly inside the Colors section of the editor
+
+#### Theme-Aware Color Placeholders
+- Each color field placeholder now shows the actual default for the active theme
+  (e.g. `#1f2a3c` in dark mode, `#ffffff` in light mode) instead of a generic hint
+
+#### Color Input Sanitisation
+- Color fields now auto-normalise input on save:
+  ▸ strips extra `#` characters (`##1F2A3C` → `#1f2a3c`)
+  ▸ lowercases hex values
+  ▸ accepts input with or without leading `#`
+
+#### Helper Text on Color Fields
+- Each color field shows a subtitle explaining exactly what it controls
+  (e.g. *"Border glow and shadow around each box"*)
+
+#### Version Badge in Editor
+- Card version number (`v0.1.2`) now displayed in the top-right of the Conf. tab
+- Users can always confirm which version is installed without leaving the editor
+
+### 🌍 Internationalization
+
+#### New Languages Added 🗣️
+- **Spanish** (`lang-es.js`) — full translation of all keys
+- **Portuguese** (`lang-pt.js`) — full translation of all keys
+- **Italian** (`lang-it.js`) — full translation of all keys
+- Total supported languages: **7** (EN, DE, FR, NL, ES, PT, IT)
+
+#### New Translation Keys (all 7 languages)
+- `colors` — Colors section label
+- `color_box_bg` / `color_box_bg_help`
+- `color_dashboard_bg` / `color_dashboard_bg_help`
+- `color_box_shadow` / `color_box_shadow_help`
+- `color_anchor` / `color_anchor_help`
+- `color_line` / `color_line_help`
+- `colors_reset` — Reset to defaults button
+
+### 🔧 Improvements
+
+#### Editor UX
+- Colors section wrapped in a `contMenu` bordered container with `headerMenu` label — visually consistent with the rest of the editor layout
+- Color fields render two per row to reduce scrolling
+- `helper-text` attribute added to color fields using the same pattern as existing animation threshold field
+
+#### CSS Architecture
+- `css-dark.js` and `css-light.js` functions now accept a `colors` object parameter
+- Internal CSS variables (`--box-background-color`, `--box-shadow-color`, `--anchor-color`, `--line-color`) remain unchanged — full backward compatibility
+- Color values injected directly into CSS template at render time
+
+### 🔄 Backward Compatibility
+
+- All existing configurations continue to work without modification
+- If no custom colors are configured, theme defaults are used exactly as before
+- `cssDataDark()` and `cssDataLight()` can still be called without arguments
+
+---
+
 ## 🎯 v1.0.1 — 2025-12-11
 Smart Power Flow & Enhanced Display Control
 ✨ New Features
